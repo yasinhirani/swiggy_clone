@@ -1,6 +1,11 @@
+"use client";
+import Navbar from "@/core/components/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Mukta } from "next/font/google";
+import { useState, useMemo, useEffect } from "react";
+import { ILocationInfo } from "@/core/model/location.model";
+import { LocationContext } from "@/core/context";
 
 const inter = Mukta({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -17,9 +22,34 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [locationInfo, setLocationInfo] = useState<ILocationInfo | null>(null);
+
+  const locationInfoState = useMemo(
+    () => ({
+      locationInfo,
+      setLocationInfo,
+    }),
+    [locationInfo]
+  );
+
+  useEffect(() => {
+    if (localStorage.userLocation) {
+      const userLocation = JSON.parse(
+        localStorage.getItem("userLocation") as string
+      );
+      setLocationInfo(userLocation);
+    }
+  }, []);
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <LocationContext.Provider value={locationInfoState}>
+          <div className="w-full h-full bg-white flex flex-col">
+            <Navbar />
+            {children}
+          </div>
+        </LocationContext.Provider>
+      </body>
     </html>
   );
 }
