@@ -46,7 +46,7 @@ function Navbar() {
       setLocationList(null);
       return;
     }
-  }, 800);
+  }, 500);
   return (
     <>
       <nav className="w-full flex items-center h-20 shadow-xl bg-white fixed top-0 px-6 py-3 z-10">
@@ -118,8 +118,9 @@ function Navbar() {
               <li>
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2"
+                  className="text-base font-medium flex items-center space-x-2 relative"
                 >
+                  {/* <span className="absolute top-1.5 left-3.5 text-xs">2</span> */}
                   <ShoppingBagIcon className="w-5 h-5" />
                   <span>Cart</span>
                 </Link>
@@ -160,11 +161,11 @@ function Navbar() {
                   type="button"
                   key={Math.random()}
                   onClick={() => getLocationInfo(list.place_id)}
-                  className="flex items-start space-x-5 w-full text-left"
+                  className="flex items-start space-x-5 w-full text-left group"
                 >
                   <MapPinIcon className="w-5 h-5" />
                   <div className="border-b border-dashed border-gray-400 w-full pb-6">
-                    <p className="font-normal text-lg break-words">
+                    <p className="font-normal text-lg break-words group-hover:text-orange-500">
                       {list.structured_formatting.main_text}
                     </p>
                     <p className="font-normal text-sm text-gray-500 break-words">
