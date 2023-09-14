@@ -18,7 +18,9 @@ function Restaurant() {
   const restaurantId = searchParams.get("restaurantId");
 
   const [restaurantData, setRestaurantData] = useState<Array<any>>([]);
+  const [restaurantMenu, setRestaurantMenu] = useState<Array<any>>([]);
   const [menuList, setMenuList] = useState<Array<any>>([]);
+  const [vegOnlySelected, setVegOnlySelected] = useState<boolean>(false);
 
   const getRestaurantMenu = () => {
     if (restaurantId && locationInfo) {
@@ -30,15 +32,14 @@ function Restaurant() {
         )
         .then((res) => {
           setRestaurantData(res.data.data.cards);
-          // const menu =
-          //   res.data.data.cards[2].groupCard.cardGroupMap.REGULAR.cards.splice(
-          //     1,
-          //     res.data.data.cards[2].groupCard.cardGroupMap.REGULAR.cards
-          //       .length - 1
-          //   );
           const menu =
             res.data.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards;
-          setMenuList(menu);
+          if (menu[1].card.card.hasOwnProperty("carousel")) {
+            setMenuList(menu.slice(2, menu.length - 2));
+          } else {
+            setMenuList(menu.slice(1, menu.length - 2));
+          }
+          setRestaurantMenu(menu);
         });
     }
   };
@@ -156,30 +157,56 @@ function Restaurant() {
                         {offer.info.header}
                       </p>
                     </div>
-                    <p className="font-semibold text-xs text-gray-500 whitespace-nowrap">
-                      {offer.info.couponCode} | {offer.info.description}
-                    </p>
+                    {offer.info.couponCode && offer.info.description && (
+                      <p className="font-semibold text-xs text-gray-500 whitespace-nowrap">
+                        {offer.info.couponCode} | {offer.info.description}
+                      </p>
+                    )}
                   </div>
                 );
               }
             )}
           </div>
           {/* End Offers */}
-          {/* End pure veg, veg and non-veg heading */}
-          <div className="mt-10">
-            <p className="font-bold text-base text-gray-800">
-              {menuList[0].card.card?.isPureVeg ? "Pure Veg" : "Veg Only"}
-            </p>
-          </div>
           {/* Start pure veg, veg and non-veg heading */}
+          <div className="mt-10 flex items-center space-x-5">
+            <p className="font-bold text-base text-gray-800">
+              {restaurantMenu[0].card.card?.isPureVeg ? "Pure Veg" : "Veg Only"}
+            </p>
+            {!restaurantMenu[0].card.card?.isPureVeg && (
+              <div
+                role="button"
+                onClick={() => setVegOnlySelected(!vegOnlySelected)}
+                className={`w-9 ${
+                  vegOnlySelected ? "bg-green-700" : "bg-gray-200"
+                } h-[18px] relative rounded`}
+              >
+                <div
+                  className={`absolute top-0.5 bottom-0.5 transition-all ${
+                    vegOnlySelected ? "right-0.5" : "left-0.5"
+                  } w-4 bg-white rounded`}
+                />
+              </div>
+            )}
+          </div>
+          {/* End pure veg, veg and non-veg heading */}
           {/* Start Divider */}
           <hr className="border-gray-300 mt-4" />
           {/* End Divider */}
           {/* Start Menu Listing */}
-          <div className="space-y-3 bg-gray-200">
-            {menuList.slice(1, menuList.length - 2).map((menu) => {
-              return <MenuList key={Math.random()} menu={menu.card.card} />;
-            })}
+          <div className="space-y-3 bg-gray-200 pb-20">
+            {menuList
+              .filter((menu) => menu.card.card.hasOwnProperty("itemCards"))
+              .map((menu) => {
+                return (
+                  <MenuList
+                    key={Math.random()}
+                    menu={menu.card.card}
+                    isVegOnlySelected={vegOnlySelected}
+                  />
+                );
+              })}
+            {/* Start License Info and restaurant info */}
             <div className="px-3 pb-4">
               <div className="flex items-center space-x-5">
                 <figure>
@@ -191,26 +218,30 @@ function Restaurant() {
                   />
                 </figure>
                 <p className="font-normal text-sm text-gray-500">
-                  {menuList[menuList.length - 2].card.card.text[0]}
+                  {restaurantMenu[restaurantMenu.length - 2].card.card.text[0]}
                 </p>
               </div>
               <hr className="my-4 border-gray-400" />
               <div>
                 <p className="font-bold text-base text-gray-500">
-                  {menuList[menuList.length - 1].card.card.name}
+                  {restaurantMenu[restaurantMenu.length - 1].card.card.name}
                 </p>
                 <p className="font-normal text-sm text-gray-400">
                   (Outlet:
-                  {menuList[menuList.length - 1].card.card.area})
+                  {restaurantMenu[restaurantMenu.length - 1].card.card.area})
                 </p>
                 <p className="font-medium text-xs text-gray-400 flex items-end mt-3">
                   <MapPinIcon className="w-4 h-4 text-gray-400" />
                   <span>
-                    {menuList[menuList.length - 1].card.card.completeAddress}
+                    {
+                      restaurantMenu[restaurantMenu.length - 1].card.card
+                        .completeAddress
+                    }
                   </span>
                 </p>
               </div>
             </div>
+            {/* End License Info and restaurant info */}
           </div>
           {/* End Menu Listing */}
         </div>
