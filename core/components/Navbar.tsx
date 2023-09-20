@@ -14,11 +14,12 @@ import Link from "next/link";
 import locationService from "../service/location.service";
 import { debounce } from "lodash";
 import { LocationContext } from "../context";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 function Navbar() {
   const { locationInfo, setLocationInfo } = useContext(LocationContext);
   const router = useRouter();
+  const pathName = usePathname();
   const [isLocationModalOpen, setIsLocationModalOpen] =
     useState<boolean>(false);
   const [locationList, setLocationList] = useState<Array<any> | null>(null);
@@ -63,26 +64,30 @@ function Navbar() {
                 />
               </figure>
             </Link>
-            <button
-              type="button"
-              onClick={() => setIsLocationModalOpen(true)}
-              className="text-sm flex items-center group"
-            >
-              <span className="border-b-2 border-black font-extrabold group-hover:text-orange-500 group-hover:border-orange-500">
-                Other
-              </span>
-              <span className="pl-2 text-gray-500 font-normal">
-                {locationInfo?.formatted_address}
-              </span>
-              <ChevronDownIcon className="w-5 h-5 text-orange-500 ml-2" />
-            </button>
+            {pathName && !pathName?.includes("support") ? (
+              <button
+                type="button"
+                onClick={() => setIsLocationModalOpen(true)}
+                className="text-sm flex items-center group"
+              >
+                <span className="border-b-2 border-black font-extrabold group-hover:text-orange-500 group-hover:border-orange-500">
+                  Other
+                </span>
+                <span className="pl-2 text-gray-500 font-normal">
+                  {locationInfo?.formatted_address}
+                </span>
+                <ChevronDownIcon className="w-5 h-5 text-orange-500 ml-2" />
+              </button>
+            ) : (
+              <h2 className="font-extrabold text-base uppercase text-gray-800">Help</h2>
+            )}
           </div>
           <div>
             <ul className="flex items-center space-x-12">
               <li>
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                 >
                   <MagnifyingGlassIcon className="w-5 h-5" />
                   <span>Search</span>
@@ -91,7 +96,7 @@ function Navbar() {
               <li>
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                 >
                   <GiftIcon className="w-5 h-5" />
                   <span>Offers</span>
@@ -99,8 +104,8 @@ function Navbar() {
               </li>
               <li>
                 <Link
-                  href="/"
-                  className="text-base font-medium flex items-center space-x-2"
+                  href="/support"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                 >
                   <LifebuoyIcon className="w-5 h-5" />
                   <span>Help</span>
@@ -109,7 +114,7 @@ function Navbar() {
               <li>
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                 >
                   <UserIcon className="w-5 h-5" />
                   <span>Sign In</span>
@@ -118,7 +123,7 @@ function Navbar() {
               <li>
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2 relative"
+                  className="text-base font-medium flex items-center space-x-2 relative hover:text-orange-500"
                 >
                   {/* <span className="absolute top-1.5 left-3.5 text-xs">2</span> */}
                   <ShoppingBagIcon className="w-5 h-5" />

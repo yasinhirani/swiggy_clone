@@ -19,3 +19,16 @@ body {
 .bg-linear-black-to-white{
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
 }
+
+/* Spinner Loader */
+.loader{
+  width: 60px;
+  height: 60px;
+  border-right: 4px solid;
+  border-left: 4px solid;
+  border-bottom: 4px solid;
+  border-top: 4px solid;
+  border-radius: 50%;
+  @apply border-gray-500;
+  border-top-color: rgba(255, 255, 255, 0.8);
+}
