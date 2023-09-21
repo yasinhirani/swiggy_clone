@@ -6,6 +6,7 @@ import { Mukta } from "next/font/google";
 import { useState, useMemo, useEffect } from "react";
 import { ILocationInfo } from "@/core/model/location.model";
 import { LocationContext } from "@/core/context";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const inter = Mukta({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -43,14 +44,16 @@ export default function RootLayout({
   }, []);
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <LocationContext.Provider value={locationInfoState}>
-          <div className="w-full h-full bg-white flex flex-col">
-            <Navbar />
-            {children}
-          </div>
-        </LocationContext.Provider>
-      </body>
+      <UserProvider>
+        <body className={inter.className}>
+          <LocationContext.Provider value={locationInfoState}>
+            <div className="w-full h-full bg-white flex flex-col">
+              <Navbar />
+              {children}
+            </div>
+          </LocationContext.Provider>
+        </body>
+      </UserProvider>
     </html>
   );
 }
