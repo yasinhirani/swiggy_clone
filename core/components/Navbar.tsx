@@ -86,7 +86,7 @@ function Navbar() {
             <ul className="flex items-center space-x-12">
               <li>
                 <Link
-                  href="/"
+                  href="/search"
                   className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                 >
                   <MagnifyingGlassIcon className="w-5 h-5" />

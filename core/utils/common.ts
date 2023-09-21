@@ -15,6 +15,8 @@ const SWIGGY_FSSAI_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_120,h_60/fssai_final_edss9i";
 const SWIGGY_APP_STORE_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/";
+const SWIGGY_SEARCH_IMG_URL =
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_112,h_112,c_fill/";
 
 export {
   CORS_BYPASS_URL,
@@ -25,5 +27,6 @@ export {
   SWIGGY_OFFER_LOGO_URL,
   SWIGGY_MENU_ITEM_IMG_URL,
   SWIGGY_FSSAI_IMG_URL,
-  SWIGGY_APP_STORE_IMG_URL
+  SWIGGY_APP_STORE_IMG_URL,
+  SWIGGY_SEARCH_IMG_URL
 };
