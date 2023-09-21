@@ -31,13 +31,31 @@ const update = (updateObj: any) => {
   return axios.post(updateApi, updateObj);
 };
 
+const getSuggestions = (searchText: string, lat: string, lng: string) => {
+  const searchSuggestionApi = `${CORS_BYPASS_URL}https://www.swiggy.com/dapi/restaurants/search/suggest?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null`;
+  return axios.get(searchSuggestionApi);
+};
+
+const getSearchResults = (searchText: string, lat: string, lng: string) => {
+  const searchResultsApi = `${CORS_BYPASS_URL}https://www.swiggy.com/dapi/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&submitAction=SUGGESTION`;
+  return axios.get(searchResultsApi);
+};
+
+const changeSearchResults = (searchText: string, lat: string, lng: string, selectedTab: string) => {
+  const searchResultsApi = `${CORS_BYPASS_URL}https://www.swiggy.com/dapi/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&submitAction=SUGGESTION&selectedPLTab=${selectedTab}`;
+  return axios.get(searchResultsApi);
+};
+
 const swiggyServices = {
   getHomePageData,
   getCollections,
   getRestaurantMenu,
   getSupportIssues,
   getIssueRelatedFaqs,
-  update
+  update,
+  getSuggestions,
+  getSearchResults,
+  changeSearchResults
 };
 
 export default swiggyServices;
