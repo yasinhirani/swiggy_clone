@@ -16,12 +16,12 @@ body {
   scroll-behavior: smooth;
 }
 
-.bg-linear-black-to-white{
+.bg-linear-black-to-white {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
 }
 
 /* Spinner Loader */
-.loader{
+.loader {
   width: 60px;
   height: 60px;
   border-right: 4px solid;
@@ -31,4 +31,10 @@ body {
   border-radius: 50%;
   @apply border-gray-500;
   border-top-color: rgba(255, 255, 255, 0.8);
+}
+
+.cart {
+  fill: #fff;
+  stroke-width: 2px;
+  stroke: #282c3f;
 }

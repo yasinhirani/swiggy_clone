@@ -15,11 +15,13 @@ import locationService from "../service/location.service";
 import { debounce } from "lodash";
 import { LocationContext } from "../context";
 import { useRouter, usePathname } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 function Navbar() {
   const { locationInfo, setLocationInfo } = useContext(LocationContext);
   const router = useRouter();
   const pathName = usePathname();
+  const { user, isLoading } = useUser();
   const [isLocationModalOpen, setIsLocationModalOpen] =
     useState<boolean>(false);
   const [locationList, setLocationList] = useState<Array<any> | null>(null);
@@ -79,7 +81,9 @@ function Navbar() {
                 <ChevronDownIcon className="w-5 h-5 text-orange-500 ml-2" />
               </button>
             ) : (
-              <h2 className="font-extrabold text-base uppercase text-gray-800">Help</h2>
+              <h2 className="font-extrabold text-base uppercase text-gray-800">
+                Help
+              </h2>
             )}
           </div>
           <div>
@@ -112,21 +116,44 @@ function Navbar() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/"
-                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
-                >
-                  <UserIcon className="w-5 h-5" />
-                  <span>Sign In</span>
-                </Link>
+                {!user && !isLoading && (
+                  <Link
+                    href="/api/auth/login"
+                    className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
+                  >
+                    <UserIcon className="w-5 h-5" />
+                    <span>Sign In</span>
+                  </Link>
+                )}
+                {user && !isLoading && (
+                  <Link
+                    href="/api/auth/logout"
+                    className="text-base font-medium flex items-center space-x-2"
+                  >
+                    <UserIcon className="w-5 h-5" />
+                    <span className="w-[10ch] overflow-hidden overflow-ellipsis">
+                      {user.name}
+                    </span>
+                  </Link>
+                )}
               </li>
               <li>
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2 relative hover:text-orange-500"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                 >
-                  {/* <span className="absolute top-1.5 left-3.5 text-xs">2</span> */}
-                  <ShoppingBagIcon className="w-5 h-5" />
+                  <span className="relative">
+                    <small className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm font-bold">0</small>
+                    <svg
+                      className="cart"
+                      viewBox="-1 0 37 32"
+                      height="20"
+                      width="20"
+                      fill="#686b78"
+                    >
+                      <path d="M4.438 0l-2.598 5.11-1.84 26.124h34.909l-1.906-26.124-2.597-5.11z"></path>
+                    </svg>
+                  </span>
                   <span>Cart</span>
                 </Link>
               </li>
