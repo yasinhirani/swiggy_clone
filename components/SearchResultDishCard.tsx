@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-function SearchResultDishCard({ dishInfo }: any) {
+function SearchResultDishCard({ dishInfo, addToCart }: any) {
   const router = useRouter();
   return (
     <div className="bg-white p-4 rounded-3xl">
@@ -69,6 +69,22 @@ function SearchResultDishCard({ dishInfo }: any) {
           )}
           <figcaption>
             <button
+              type="button"
+              onClick={() => {
+                addToCart(
+                  dishInfo.info.id,
+                  dishInfo.info.hasOwnProperty("isVeg") ? true : false,
+                  dishInfo.info.name,
+                  dishInfo.info.price / 100,
+                  false,
+                  {
+                    RestaurantId: dishInfo.restaurant.info.id,
+                    RestaurantName: dishInfo.restaurant.info.name,
+                    RestaurantLocation: dishInfo.restaurant.info.areaName,
+                    RestaurantImage: dishInfo.restaurant.info.cloudinaryImageId,
+                  }
+                );
+              }}
               className={`px-5 py-1.5 bg-white font-bold text-base border border-gray-300 rounded shadow shadow-white text-green-600 w-24 ${
                 dishInfo.info.imageId ? " transform -translate-y-6" : ""
               }`}

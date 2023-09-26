@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import FoodItemCard from "./FoodItemCard";
 
-function MenuList({ menu, isVegOnlySelected }: any) {
+function MenuList({ menu, isVegOnlySelected, addToCart }: any) {
   const [isMenuListOpen, setIsMenuListOpen] = useState<boolean>(true);
   const [menuItems, setMenuItems] = useState<Array<any>>(menu.itemCards);
 
@@ -41,7 +41,7 @@ function MenuList({ menu, isVegOnlySelected }: any) {
             {menuItems.map((items: any, index: number) => {
               return (
                 <div key={Math.random()}>
-                  <FoodItemCard foodData={items.card.info} />
+                  <FoodItemCard foodData={items.card.info} addToCart={addToCart} />
                   {index < menu.itemCards.length - 1 && (
                     <hr className="mt-8 mb-4 border-gray-300" />
                   )}

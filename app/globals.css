@@ -33,8 +33,21 @@ body {
   border-top-color: rgba(255, 255, 255, 0.8);
 }
 
-.cart {
-  fill: #fff;
-  stroke-width: 2px;
-  stroke: #282c3f;
+/* Info modal for item already in cart by different restaurant */
+.info-modal{
+  box-shadow: 0 2px 20px 0 rgba(40,44,63,.5);
+  transition: all .2s ease-in-out;
+}
+
+/* Hero section css */
+.hero{
+  position: absolute;
+  background-color: gray;
+  background-image: url("https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_1340/Lunch1_vlksgq");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  left: calc(50% + 80px);
+  right: 0;
+  top: 0;
 }

@@ -1,11 +1,97 @@
-import Image from "next/image";
-import React from "react";
+import React, { useContext, useState } from "react";
 import SearchResultRestaurantCard from "./SearchResultRestaurantCard";
 import SearchResultDishCard from "./SearchResultDishCard";
+import { CartContext } from "@/core/context";
 
 function SearchResults({ tabs, list }: any) {
+  const { CartData, SetCartData } = useContext(CartContext);
+  const [cartItem, setCartItem] = useState<ICartItems | null>(null);
+  const [restaurantDataState, setRestaurantDataState] =
+    useState<ICartRestaurantDetails | null>(null);
+  const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
+
+  const resetCartForNewOrder = () => {
+    SetCartData({ Items: [], RestaurantDetails: null });
+    if (cartItem && restaurantDataState) {
+      console.log(cartItem);
+      addToCart(
+        cartItem.ItemId,
+        cartItem.IsVeg,
+        cartItem.ItemName,
+        cartItem.Price,
+        true,
+        restaurantDataState
+      );
+    }
+    setInfoModalVisible(false);
+  };
+
+  const addToCart = (
+    itemId: string,
+    isVeg: boolean,
+    itemName: string,
+    price: number,
+    isAfreshStart: boolean,
+    restaurantData: ICartRestaurantDetails
+  ) => {
+    let copyCart = [...CartData.Items];
+    let itemToAdd: ICartItems = {
+      ItemId: itemId,
+      IsVeg: isVeg,
+      ItemName: itemName,
+      Price: price,
+      Quantity: 1,
+      Total: price,
+    };
+    setRestaurantDataState(restaurantData);
+    setCartItem(itemToAdd);
+    // Start Add initial Product and restaurant details to cart
+    if (copyCart.length === 0 || isAfreshStart) {
+      const restaurantDetails: ICartRestaurantDetails = {
+        RestaurantId: restaurantData.RestaurantId || "",
+        RestaurantImage: restaurantData.RestaurantImage,
+        RestaurantLocation: restaurantData.RestaurantLocation,
+        RestaurantName: restaurantData.RestaurantName,
+      };
+      copyCart = [];
+      copyCart.push(itemToAdd);
+      SetCartData({
+        RestaurantDetails: restaurantDetails,
+        Items: copyCart,
+      });
+      console.log("run");
+      return;
+    }
+    // End Add initial Product and restaurant details to cart
+    // Start check if restaurant is same or different
+    if (
+      CartData.RestaurantDetails?.RestaurantId !== restaurantData?.RestaurantId
+    ) {
+      setInfoModalVisible(true);
+      return;
+    }
+    // End check if restaurant is same or different
+    // Start add/update to cart if same restaurant
+    const itemIndex = copyCart.findIndex((item) => item.ItemId === itemId);
+    if (itemIndex === -1) {
+      copyCart.push(itemToAdd);
+      SetCartData({
+        Items: copyCart,
+        RestaurantDetails: CartData.RestaurantDetails,
+      });
+    } else {
+      copyCart[itemIndex].Quantity = copyCart[itemIndex].Quantity + 1;
+      copyCart[itemIndex].Total =
+        copyCart[itemIndex].Quantity * copyCart[itemIndex].Price;
+      SetCartData({
+        Items: copyCart,
+        RestaurantDetails: CartData.RestaurantDetails,
+      });
+    }
+    // End add/update to cart if same restaurant
+  };
   return (
-    <div className="mt-5">
+    <div className="mt-5 relative">
       <div className="flex items-center space-x-3 mb-5">
         {tabs.length > 0 &&
           tabs.map((tab: any) => {
@@ -53,11 +139,43 @@ function SearchResults({ tabs, list }: any) {
                   <SearchResultDishCard
                     key={Math.random()}
                     dishInfo={card.card.card}
+                    addToCart={addToCart}
                   />
                 );
               })}
         </div>
       </div>
+      {/* Start Modal for info for item already in cart */}
+      <div
+        className={`fixed ${
+          infoModalVisible ? "bottom-8" : "-bottom-full"
+        } left-1/2 transform -translate-x-1/2 bg-white p-6 z-30 w-full max-w-[500px] min-w-[300px] info-modal`}
+      >
+        <h2 className="font-bold text-2xl text-gray-700">
+          Items already in cart
+        </h2>
+        <p className="font-normal text-sm text-gray-500 mt-2">
+          Your cart contains items from other restaurant. Would you like to
+          reset your cart for adding items from this restaurant?
+        </p>
+        <div className="flex items-center space-x-5 mt-5">
+          <button
+            type="button"
+            onClick={() => setInfoModalVisible(false)}
+            className="w-full border border-[#60b246] text-[#60b246] px-4 py-2 uppercase"
+          >
+            No
+          </button>
+          <button
+            type="button"
+            onClick={() => resetCartForNewOrder()}
+            className="w-full border border-[#60b246] bg-[#60b246] text-white px-4 py-2 uppercase"
+          >
+            yes, start afresh
+          </button>
+        </div>
+      </div>
+      {/* End Modal for info for item already in cart */}
     </div>
   );
 }
