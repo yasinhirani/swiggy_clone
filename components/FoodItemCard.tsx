@@ -3,7 +3,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import React from "react";
 
-function FoodItemCard({ foodData }: any) {
+function FoodItemCard({ foodData, addToCart }: any) {
   return (
     <div
       className={`flex justify-between ${
@@ -15,7 +15,9 @@ function FoodItemCard({ foodData }: any) {
         <div className="flex items-center space-x-2 mb-2">
           <figure>
             <Image
-              src={`${foodData.isVeg ? "/images/veg.svg" : "/images/non_veg.svg"}`}
+              src={`${
+                foodData.isVeg ? "/images/veg.svg" : "/images/non_veg.svg"
+              }`}
               alt="Veg"
               width={20}
               height={20}
@@ -29,7 +31,9 @@ function FoodItemCard({ foodData }: any) {
           )}
         </div>
         <h4 className="font-medium text-lg text-gray-800">{foodData.name}</h4>
-        <p className="font-normal text-sm">₹{foodData.price / 100}</p>
+        <p className="font-normal text-sm">
+          ₹{foodData.price / 100 || foodData.defaultPrice / 100}
+        </p>
       </div>
       {/* End Food details */}
       {/* Start Food Image */}
@@ -45,6 +49,16 @@ function FoodItemCard({ foodData }: any) {
         )}
         <figcaption>
           <button
+            type="button"
+            onClick={() =>
+              addToCart(
+                foodData.id,
+                foodData.isVeg ? true : false,
+                foodData.name,
+                foodData.price / 100,
+                false
+              )
+            }
             className={`px-5 py-1.5 bg-white font-bold text-base border border-gray-300 rounded shadow shadow-white text-green-600 w-24 ${
               foodData.imageId ? " transform -translate-y-6" : ""
             }`}

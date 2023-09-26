@@ -13,12 +13,13 @@ import Image from "next/image";
 import Link from "next/link";
 import locationService from "../service/location.service";
 import { debounce } from "lodash";
-import { LocationContext } from "../context";
+import { CartContext, LocationContext } from "../context";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 function Navbar() {
   const { locationInfo, setLocationInfo } = useContext(LocationContext);
+  const { CartData } = useContext(CartContext);
   const router = useRouter();
   const pathName = usePathname();
   const { user, isLoading } = useUser();
@@ -75,7 +76,7 @@ function Navbar() {
                 <span className="border-b-2 border-black font-extrabold group-hover:text-orange-500 group-hover:border-orange-500">
                   Other
                 </span>
-                <span className="pl-2 text-gray-500 font-normal">
+                <span className="pl-2 text-gray-500 font-normal whitespace-nowrap w-full max-w-[25ch] overflow-hidden overflow-ellipsis">
                   {locationInfo?.formatted_address}
                 </span>
                 <ChevronDownIcon className="w-5 h-5 text-orange-500 ml-2" />
@@ -116,40 +117,50 @@ function Navbar() {
                 </Link>
               </li>
               <li>
-                {!user && !isLoading && (
+                {!user && (
                   <Link
                     href="/api/auth/login"
                     className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
                   >
                     <UserIcon className="w-5 h-5" />
-                    <span>Sign In</span>
+                    <span>{isLoading ? "Please wait" : "Sign In"}</span>
                   </Link>
                 )}
-                {user && !isLoading && (
+                {user && (
                   <Link
                     href="/api/auth/logout"
                     className="text-base font-medium flex items-center space-x-2"
                   >
                     <UserIcon className="w-5 h-5" />
                     <span className="w-[10ch] overflow-hidden overflow-ellipsis">
-                      {user.name}
+                      {isLoading ? "Please wait" : user.name}
                     </span>
                   </Link>
                 )}
               </li>
               <li>
                 <Link
-                  href="/"
-                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
+                  href="/checkout"
+                  className="text-base font-medium flex items-center space-x-2 group hover:text-orange-500"
                 >
                   <span className="relative">
-                    <small className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm font-bold">0</small>
+                    <small
+                      className={`${
+                        CartData.Items.length > 0 ? "text-white" : "text-black group-hover:text-orange-500"
+                      } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm font-bold`}
+                    >
+                      {CartData?.Items.length}
+                    </small>
                     <svg
-                      className="cart"
+                      className={`${
+                        CartData.Items.length > 0
+                          ? "stroke-[#60b246] fill-[#60b246] group-hover:fill-orange-500"
+                          : "stroke-black fill-white"
+                      } group-hover:stroke-orange-500 stroke-2`}
                       viewBox="-1 0 37 32"
                       height="20"
                       width="20"
-                      fill="#686b78"
+                      fill="currentColor"
                     >
                       <path d="M4.438 0l-2.598 5.11-1.84 26.124h34.909l-1.906-26.124-2.597-5.11z"></path>
                     </svg>

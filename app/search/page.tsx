@@ -71,7 +71,6 @@ function Search() {
         searchTextRef.current.value = query;
         getSearchResults(query);
       }
-      console.log("run");
     } else {
       if (searchTextRef.current) {
         searchTextRef.current.value = "";

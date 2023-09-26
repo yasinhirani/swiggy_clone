@@ -13,11 +13,13 @@ function SearchResultRestaurantCard({ maxWidth, restaurantInfo }: IProps) {
   return (
     <div
       role="button"
-      onClick={() =>
-        router.push(
-          `/restaurant?name=${restaurantInfo.name}&restaurantId=${restaurantInfo.feeDetails.restaurantId}`
-        )
-      }
+      onClick={() => {
+        if (restaurantInfo.feeDetails.restaurantId) {
+          router.push(
+            `/restaurant?name=${restaurantInfo.name}&restaurantId=${restaurantInfo.feeDetails.restaurantId}`
+          );
+        }
+      }}
       className={`${
         maxWidth ? maxWidth : ""
       } bg-white pl-4 pr-10 py-5 flex items-center space-x-5 rounded`}

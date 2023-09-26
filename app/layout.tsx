@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { Mukta } from "next/font/google";
 import { useState, useMemo, useEffect } from "react";
 import { ILocationInfo } from "@/core/model/location.model";
-import { LocationContext } from "@/core/context";
+import { CartContext, LoadingContext, LocationContext } from "@/core/context";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const inter = Mukta({
@@ -25,6 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [locationInfo, setLocationInfo] = useState<ILocationInfo | null>(null);
+  const [CartData, SetCartData] = useState<ICartData>({
+    Items: [],
+    RestaurantDetails: null,
+  });
+  const [loading, setLoading] = useState<boolean>(true);
 
   const locationInfoState = useMemo(
     () => ({
@@ -34,23 +39,51 @@ export default function RootLayout({
     [locationInfo]
   );
 
+  const cartDataState = useMemo(
+    () => ({
+      CartData,
+      SetCartData,
+    }),
+    [CartData]
+  );
+
+  const loadingState = useMemo(
+    () => ({
+      loading,
+      setLoading,
+    }),
+    [loading]
+  );
+
   useEffect(() => {
+    setLoading(true);
     if (localStorage.userLocation) {
       const userLocation = JSON.parse(
         localStorage.getItem("userLocation") as string
       );
       setLocationInfo(userLocation);
     }
+    if (localStorage.cartData) {
+      const localStorageCartData = JSON.parse(
+        localStorage.getItem("cartData") as string
+      );
+      SetCartData(localStorageCartData);
+    }
+    setLoading(false);
   }, []);
   return (
     <html lang="en">
       <UserProvider>
         <body className={inter.className}>
           <LocationContext.Provider value={locationInfoState}>
-            <div className="w-full h-full bg-white flex flex-col">
-              <Navbar />
-              {children}
-            </div>
+            <CartContext.Provider value={cartDataState}>
+              <LoadingContext.Provider value={loadingState}>
+                <div className="w-full h-full bg-white flex flex-col">
+                  {locationInfo && <Navbar />}
+                  {children}
+                </div>
+              </LoadingContext.Provider>
+            </CartContext.Provider>
           </LocationContext.Provider>
         </body>
       </UserProvider>

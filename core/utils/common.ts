@@ -17,6 +17,12 @@ const SWIGGY_APP_STORE_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/";
 const SWIGGY_SEARCH_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_112,h_112,c_fill/";
+const SWIGGY_HERO_NO_MINIMUM_ORDER_IMG_URL =
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_210,h_398/4x_-_No_min_order_x0bxuf";
+const SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL =
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_224,h_412/4x_Live_order_zzotwy";
+const SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL =
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_248,h_376/4x_-_Super_fast_delivery_awv7sn";
 
 export {
   CORS_BYPASS_URL,
@@ -28,5 +34,8 @@ export {
   SWIGGY_MENU_ITEM_IMG_URL,
   SWIGGY_FSSAI_IMG_URL,
   SWIGGY_APP_STORE_IMG_URL,
-  SWIGGY_SEARCH_IMG_URL
+  SWIGGY_SEARCH_IMG_URL,
+  SWIGGY_HERO_NO_MINIMUM_ORDER_IMG_URL,
+  SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL,
+  SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL
 };

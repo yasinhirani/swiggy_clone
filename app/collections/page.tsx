@@ -8,7 +8,7 @@ import React, { useEffect, useState, useContext } from "react";
 function Collections() {
   const { locationInfo } = useContext(LocationContext);
   const searchParams = useSearchParams();
-  const collectionId = searchParams.get("collectionId");
+  const collectionId = searchParams?.get("collectionId");
 
   const [collectionData, setCollectionData] = useState<any>([]);
   const [restaurantsList, setRestaurantsList] = useState<any>([]);
