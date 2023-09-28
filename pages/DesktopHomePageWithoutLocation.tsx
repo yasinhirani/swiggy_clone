@@ -25,11 +25,15 @@ function DesktopHomePageWithoutLocation() {
     "& more.",
   ];
 
-  const [suggestions, setSuggestions] = useState<Array<any>>([]);
+  const [suggestions, setSuggestions] = useState<Array<any> | null>(null);
 
   const getLocations = (locationName: string) => {
     locationService.getLocation(locationName).then((res) => {
-      setSuggestions(res.data.data);
+      if (res.data.data.length > 0) {
+        setSuggestions(res.data.data);
+      } else {
+        setSuggestions([]);
+      }
     });
   };
 
@@ -37,20 +41,22 @@ function DesktopHomePageWithoutLocation() {
     locationService.getLocationInfo(placeId).then((res) => {
       setLocationInfo(res.data.data[0]);
       localStorage.setItem("userLocation", JSON.stringify(res.data.data[0]));
-      setSuggestions([]);
+      setSuggestions(null);
     });
   };
 
   const getSuggestions = debounce((searchText: string) => {
     if (searchText !== "") {
       getLocations(searchText);
+    } else {
+      setSuggestions(null);
     }
   }, 500);
   return (
     <div>
       <div className="relative">
-        <div className="w-full max-w-[76rem] h-[500px] mx-auto p-5">
-          <div className="w-[680px] pr-20">
+        <div className="w-full max-w-[76rem] h-auto lg:h-[500px] mx-auto p-5">
+          <div className="w-full lg:w-[680px] lg:pr-20">
             <div className="flex justify-between items-start space-x-5">
               <figure>
                 <Image
@@ -91,7 +97,7 @@ function DesktopHomePageWithoutLocation() {
                 >
                   FIND FOOD
                 </button>
-                {suggestions.length > 0 && (
+                {suggestions && suggestions.length > 0 && (
                   <div className="h-64 absolute left-0 right-0 top-16 bg-white p-5 space-y-8 overflow-hidden overflow-y-auto">
                     {suggestions.map((suggestion) => {
                       return (
@@ -115,11 +121,18 @@ function DesktopHomePageWithoutLocation() {
                     })}
                   </div>
                 )}
+                {suggestions && suggestions.length === 0 && (
+                  <div className="absolute left-0 right-0 top-16 bg-white p-5">
+                    <p className="font-semibold text-xl text-gray-700">
+                      No location found
+                    </p>
+                  </div>
+                )}
               </div>
               <p className="font-normal text-base text-gray-400 uppercase mt-8">
                 popular cities in india
               </p>
-              <p className="mt-2 w-[60ch]">
+              <p className="mt-2 w-full sm:w-[60ch]">
                 {popularCities.map((city, index) => {
                   return (
                     <span
@@ -135,11 +148,11 @@ function DesktopHomePageWithoutLocation() {
               </p>
             </div>
           </div>
-          <div className="hero" />
+          <div className="hero hidden lg:block" />
         </div>
       </div>
       <div className="bg-[#2b1e16]">
-        <div className="w-full max-w-[76rem] mx-auto px-5 pb-10 flex justify-between items-center space-x-10">
+        <div className="w-full max-w-[76rem] mx-auto px-5 pb-10 flex flex-col sm:flex-row justify-between items-center sm:space-x-10 space-y-10 sm:space-y-0">
           <div className="flex flex-col items-center">
             <figure>
               <Image
@@ -194,8 +207,8 @@ function DesktopHomePageWithoutLocation() {
         </div>
       </div>
       <div className="bg-gray-200">
-        <div className="w-full max-w-[70rem] mx-auto px-6 py-7 flex justify-between items-center space-x-5">
-          <h4 className="font-extrabold text-3xl w-[25ch] text-gray-800">
+        <div className="w-full max-w-[70rem] mx-auto px-6 py-7 flex flex-col sm:flex-row justify-between sm:items-center sm:space-x-5 space-y-6 sm:space-y-0">
+          <h4 className="font-extrabold text-2xl sm:text-3xl sm:w-[25ch] text-gray-800">
             For better experience,download the Swiggy app now
           </h4>
           <div className="flex items-center space-x-4">

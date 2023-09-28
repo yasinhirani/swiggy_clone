@@ -49,9 +49,9 @@ function Support() {
                       onClick={() => setIssueTypeSelected(issue.type)}
                       className={`px-6 md:px-0 md:pl-16 md:pr-6 py-6 ${
                         issueTypeSelected === issue.type
-                          ? "bg-white"
-                          : "bg-transparent"
-                      } font-semibold text-base w-full text-left`}
+                          ? "bg-white font-semibold"
+                          : "bg-transparent font-normal hover:font-semibold"
+                      } text-base w-full text-left`}
                     >
                       {issue.title}
                     </button>

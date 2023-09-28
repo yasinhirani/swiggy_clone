@@ -2,7 +2,7 @@
 import { LoadingContext, LocationContext } from "@/core/context";
 import DesktopHomePage from "@/pages/DesktopHomePage";
 import DesktopHomePageWithoutLocation from "@/pages/DesktopHomePageWithoutLocation";
-import SkeletonHomepageLoading from "@/pages/SkeletonHomepageLoading";
+import MobileHomePage from "@/pages/MobileHomePage";
 import { useContext, useEffect } from "react";
 
 function Home() {
@@ -13,7 +13,9 @@ function Home() {
   }, []);
   return (
     <>
-      {!loading && locationInfo && <DesktopHomePage />}
+      {!loading &&
+        locationInfo &&
+        (window.innerWidth > 920 ? <DesktopHomePage /> : <MobileHomePage />)}
       {!loading && !locationInfo && <DesktopHomePageWithoutLocation />}
     </>
   );

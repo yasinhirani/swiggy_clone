@@ -29,7 +29,11 @@ function Navbar() {
 
   const getLocations = (locationName: string) => {
     locationService.getLocation(locationName).then((res) => {
-      setLocationList(res.data.data);
+      if (res.data.data.length > 0) {
+        setLocationList(res.data.data);
+      } else {
+        setLocationList([]);
+      }
     });
   };
 
@@ -55,7 +59,7 @@ function Navbar() {
     <>
       <nav className="w-full flex items-center h-20 shadow-xl bg-white fixed top-0 px-6 py-3 z-10">
         <div className="w-full max-w-[76rem] mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-3 sm:space-x-8">
             <Link href="/">
               <figure>
                 <Image
@@ -63,7 +67,7 @@ function Navbar() {
                   alt="Swiggy"
                   width={40}
                   height={40}
-                  className="w-12 h-12 hover:scale-110 transition-transform"
+                  className="w-8 h-8 min-w-[32px] sm:w-12 sm:h-12 hover:scale-110 transition-transform"
                 />
               </figure>
             </Link>
@@ -88,8 +92,8 @@ function Navbar() {
             )}
           </div>
           <div>
-            <ul className="flex items-center space-x-12">
-              <li>
+            <ul className="flex items-center space-x-8 lg:space-x-12">
+              <li className="hidden lg:list-item">
                 <Link
                   href="/search"
                   className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
@@ -98,7 +102,7 @@ function Navbar() {
                   <span>Search</span>
                 </Link>
               </li>
-              <li>
+              <li className="hidden lg:list-item">
                 <Link
                   href="/"
                   className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
@@ -107,7 +111,7 @@ function Navbar() {
                   <span>Offers</span>
                 </Link>
               </li>
-              <li>
+              <li className="hidden lg:list-item">
                 <Link
                   href="/support"
                   className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
@@ -116,7 +120,7 @@ function Navbar() {
                   <span>Help</span>
                 </Link>
               </li>
-              <li>
+              <li className="hidden lg:list-item">
                 {!user && (
                   <Link
                     href="/api/auth/login"
@@ -146,7 +150,9 @@ function Navbar() {
                   <span className="relative">
                     <small
                       className={`${
-                        CartData.Items.length > 0 ? "text-white" : "text-black group-hover:text-orange-500"
+                        CartData.Items.length > 0
+                          ? "text-white"
+                          : "text-black group-hover:text-orange-500"
                       } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm font-bold`}
                     >
                       {CartData?.Items.length}
@@ -183,7 +189,7 @@ function Navbar() {
         />
       )}
       <div
-        className={`w-96 h-full absolute ${
+        className={`w-72 sm:w-96 h-full absolute ${
           isLocationModalOpen ? "left-0" : "-left-full"
         } bg-white z-30 transition-all px-6 py-10`}
       >
@@ -219,6 +225,11 @@ function Navbar() {
               );
             })}
           </div>
+        )}
+        {locationList && locationList.length === 0 && (
+          <p className="mt-8 font-semibold text-xl text-gray-700">
+            No location found
+          </p>
         )}
       </div>
     </>

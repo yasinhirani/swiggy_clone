@@ -15,9 +15,14 @@ const CartContext = createContext<ICartContext>({
   SetCartData: () => {},
 });
 
+const CartTotalContext = createContext<ICartTotalContext>({
+  CartTotal: 0,
+  setCartTotal: () => {},
+});
+
 const LoadingContext = createContext<ILoadingContext>({
   loading: false,
   setLoading: () => {},
 });
 
-export { LocationContext, CartContext, LoadingContext };
+export { LocationContext, CartContext, LoadingContext, CartTotalContext };

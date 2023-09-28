@@ -1,14 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SearchResultRestaurantCard from "./SearchResultRestaurantCard";
 import SearchResultDishCard from "./SearchResultDishCard";
-import { CartContext } from "@/core/context";
+import { CartContext, CartTotalContext } from "@/core/context";
+import cartTotal from "@/shared/utils/cartTotal";
 
 function SearchResults({ tabs, list }: any) {
   const { CartData, SetCartData } = useContext(CartContext);
+  const { setCartTotal } = useContext(CartTotalContext);
   const [cartItem, setCartItem] = useState<ICartItems | null>(null);
   const [restaurantDataState, setRestaurantDataState] =
     useState<ICartRestaurantDetails | null>(null);
   const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
+  const [initialLoad, setInitialLoad] = useState<boolean>(false);
 
   const resetCartForNewOrder = () => {
     SetCartData({ Items: [], RestaurantDetails: null });
@@ -90,6 +93,16 @@ function SearchResults({ tabs, list }: any) {
     }
     // End add/update to cart if same restaurant
   };
+
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false);
+      return;
+    }
+    localStorage.setItem("cartData", JSON.stringify(CartData));
+    setCartTotal(cartTotal(CartData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [CartData]);
   return (
     <div className="mt-5 relative">
       <div className="flex items-center space-x-3 mb-5">

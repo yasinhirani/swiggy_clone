@@ -28,8 +28,13 @@ function Search() {
       const lat = locationInfo.geometry.location.lat.toString();
       const lng = locationInfo.geometry.location.lng.toString();
       swiggyServices.getSuggestions(searchText, lat, lng).then((res) => {
-        if (res.data.statusMessage !== "Invalid query string") {
+        if (
+          res.data.statusMessage !== "Invalid query string" &&
+          res.data.data.suggestions.length > 0
+        ) {
           setSuggestions(res.data.data.suggestions);
+        } else {
+          setSuggestions([]);
         }
       });
     } else {
@@ -145,6 +150,11 @@ function Search() {
               );
             })}
           </div>
+        )}
+        {suggestions && suggestions.length === 0 && (
+          <p className="mt-8 font-semibold text-xl text-gray-700">
+            No restaurant found with the given name in your location
+          </p>
         )}
         {!suggestions && searchResultData && (
           <SearchResults
