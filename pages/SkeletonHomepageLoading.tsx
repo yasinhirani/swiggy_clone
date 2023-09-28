@@ -18,9 +18,9 @@ function SkeletonHomepageLoading() {
           Looking for great food near you ...
         </p>
       </div>
-      <div className="w-full max-w-[76rem] mx-auto flex space-x-8">
+      <div className="w-full max-w-[76rem] mx-auto flex lg:space-x-8">
         {/* Start Sidebar Skeleton loading */}
-        <div className="w-72 min-w-[288px] bg-white py-8 shadow-md space-y-3">
+        <div className="w-72 min-w-[288px] bg-white py-8 shadow-md space-y-3 hidden lg:block">
           {new Array(6).fill(0).map((_, index) => {
             return (
               <div
@@ -45,7 +45,7 @@ function SkeletonHomepageLoading() {
         </div>
         {/* End Sidebar Skeleton loading */}
         {/* Start Card Skeleton loading */}
-        <div className="flex-grow py-8">
+        <div className="flex-grow px-5 lg:px-0 py-8">
           <div className="w-36 h-3 bg-gray-200 mb-6" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {new Array(6).fill(0).map(() => {

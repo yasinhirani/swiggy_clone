@@ -20,3 +20,8 @@ interface ICartItems {
   Price: number;
   Total: number;
 }
+
+interface ICartTotalContext {
+  CartTotal: number;
+  setCartTotal: React.Dispatch<React.SetStateAction<number>>;
+}

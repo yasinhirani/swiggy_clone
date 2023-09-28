@@ -1,12 +1,13 @@
 "use client";
 import MenuList from "@/components/MenuList";
-import { CartContext, LocationContext } from "@/core/context";
+import { CartContext, CartTotalContext, LocationContext } from "@/core/context";
 import {
   SWIGGY_FSSAI_IMG_URL,
   SWIGGY_OFFER_GENERIC_LOGO_URL,
   SWIGGY_OFFER_LOGO_URL,
 } from "@/core/utils/common";
 import swiggyServices from "@/shared/service/swiggy.service";
+import cartTotal from "@/shared/utils/cartTotal";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +17,7 @@ import React, { useEffect, useContext, useState } from "react";
 function Restaurant() {
   const { locationInfo } = useContext(LocationContext);
   const { CartData, SetCartData } = useContext(CartContext);
+  const { setCartTotal } = useContext(CartTotalContext);
   const searchParams = useSearchParams();
   const restaurantId = searchParams?.get("restaurantId");
 
@@ -37,8 +39,14 @@ function Restaurant() {
         )
         .then((res) => {
           setRestaurantData(res.data.data.cards);
-          const menu =
-            res.data.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards;
+          let menu = [];
+          if (res.data.data.cards[2]?.card?.card?.hasOwnProperty("tabs")) {
+            menu =
+              res.data.data.cards[3].groupedCard.cardGroupMap.REGULAR.cards;
+          } else {
+            menu =
+              res.data.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards;
+          }
           if (menu[1].card.card.hasOwnProperty("carousel")) {
             setMenuList(menu.slice(2, menu.length - 2));
           } else {
@@ -52,7 +60,6 @@ function Restaurant() {
   const resetCartForNewOrder = () => {
     SetCartData({ Items: [], RestaurantDetails: null });
     if (cartItem) {
-      console.log(cartItem);
       addToCart(
         cartItem.ItemId,
         cartItem.IsVeg,
@@ -135,7 +142,8 @@ function Restaurant() {
       return;
     }
     localStorage.setItem("cartData", JSON.stringify(CartData));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCartTotal(cartTotal(CartData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CartData]);
   return (
     <div className="mt-20 flex-grow px-6 py-10 relative">

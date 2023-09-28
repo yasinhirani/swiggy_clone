@@ -1,5 +1,6 @@
 "use client";
-import { CartContext } from "@/core/context";
+import { CartContext, CartTotalContext } from "@/core/context";
+import cartTotal from "@/shared/utils/cartTotal";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 function Cart() {
   const { CartData, SetCartData } = useContext(CartContext);
+  const { CartTotal, setCartTotal } = useContext(CartTotalContext);
   const { user, isLoading } = useUser();
   const router = useRouter();
 
@@ -51,14 +53,15 @@ function Cart() {
       return;
     }
     localStorage.setItem("cartData", JSON.stringify(CartData));
+    setCartTotal(cartTotal(CartData));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CartData]);
   return (
     <div className="mt-20 flex-grow bg-gray-100 flex flex-col">
       {CartData.Items.length > 0 ? (
-        <div className="w-full max-w-[76rem] mx-auto p-5 flex space-x-8">
+        <div className="w-full max-w-[76rem] mx-auto p-5 flex flex-col-reverse sm:flex-row sm:space-x-8">
           {/* Start Left section */}
-          <div className="flex-grow">
+          <div className="w-full sm:flex-grow mt-6 sm:mt-0">
             <div className="bg-white p-6">
               {isLoading && (
                 <h4 className="font-bold text-2xl text-gray-800">
@@ -110,7 +113,7 @@ function Cart() {
           </div>
           {/* End Left section */}
           {/* Start Right section */}
-          <div className="w-80 min-w-[366px] bg-white px-6 py-5">
+          <div className="w-full sm:w-80 sm:min-w-[366px] bg-white px-6 py-5">
             {/* Start Restaurant Info */}
             <div className="flex items-start space-x-4">
               <figure>
@@ -153,10 +156,12 @@ function Cart() {
                           height={20}
                         />
                       </figure>
-                      <h5 className="font-normal text-base text-gray-800">
+                      <h5 title={item.ItemName} className="font-normal text-base text-gray-800 w-[12ch] sm:w-[16ch] whitespace-nowrap overflow-hidden overflow-ellipsis">
                         {item.ItemName}
                       </h5>
-                      <div className="border border-gray-300 flex justify-between items-center space-x-2 px-2 w-16">
+                    </div>
+                    <div className="flex items-center relative">
+                      <div className="border border-gray-300 flex justify-between items-center space-x-2 px-2 w-16 mr-12">
                         <button
                           type="button"
                           onClick={() => updateCart(item.ItemId, "decrease")}
@@ -173,10 +178,10 @@ function Cart() {
                           +
                         </button>
                       </div>
+                      <p className="font-light text-sm text-gray-700 absolute right-0">
+                        ₹{item.Total}
+                      </p>
                     </div>
-                    <p className="font-light text-sm text-gray-700">
-                      ₹{item.Total}
-                    </p>
                   </div>
                 );
               })}
@@ -192,7 +197,9 @@ function Cart() {
                 <span className="font-light text-sm text-gray-600">
                   Item Total
                 </span>
-                <span className="font-light text-sm text-gray-600">₹60</span>
+                <span className="font-light text-sm text-gray-600">
+                  ₹{CartTotal}
+                </span>
               </div>
               <div className="flex justify-between items-center mt-2">
                 <span className="font-light text-sm text-gray-600">
@@ -213,7 +220,7 @@ function Cart() {
                   To Pay
                 </span>
                 <span className="font-semibold text-base text-gray-800">
-                  ₹60
+                  ₹{CartTotal}
                 </span>
               </div>
             </div>

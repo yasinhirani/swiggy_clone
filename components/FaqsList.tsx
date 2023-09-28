@@ -19,8 +19,12 @@ function FaqsList({ faq }: any) {
       </div>
       <div className={`${isFaqOpen ? "h-auto mt-5" : "h-0"} overflow-hidden`}>
         {faq.options.length === 0 ? (
-          <p className="font-light text-base text-gray-500">
-            {faq.description}
+          <p className="font-light text-base text-gray-500 flex flex-col space-y-1">
+            {faq.description.split("\n").map((desc: string) => {
+              return(
+                <span key={Math.random()}>{desc}</span>
+              )
+            })}
           </p>
         ) : (
           <div className="flex flex-col space-y-6 items-start">

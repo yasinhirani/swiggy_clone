@@ -2,10 +2,12 @@ import { SWIGGY_MENU_ITEM_IMG_URL } from "@/core/utils/common";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 function SearchResultDishCard({ dishInfo, addToCart }: any) {
   const router = useRouter();
+  const [isFullDescriptionEnabled, setIsFullDescriptionEnabled] =
+    useState<boolean>(false);
   return (
     <div className="bg-white p-4 rounded-3xl">
       {/* Start Restaurant detail */}
@@ -53,9 +55,24 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
           <p className="mt-1 font-normal text-base text-gray-600">
             ₹{dishInfo.info.price / 100}
           </p>
-          <p className="font-light text-sm text-gray-500 mt-3 line-clamp-2">
+          <p
+            className={`font-light text-sm text-gray-500 mt-3 ${
+              isFullDescriptionEnabled ? "line-clamp-none" : "line-clamp-2"
+            }`}
+          >
             {dishInfo.info.description}
           </p>
+          {dishInfo.info.description && (
+            <button
+              type="button"
+              onClick={() =>
+                setIsFullDescriptionEnabled(!isFullDescriptionEnabled)
+              }
+              className="font-light text-sm text-gray-500 mt-2"
+            >
+              {isFullDescriptionEnabled ? "show less" : "show more"}
+            </button>
+          )}
         </div>
         <figure className="flex flex-col items-center">
           {dishInfo.info.imageId && (

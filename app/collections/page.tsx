@@ -24,7 +24,7 @@ function Collections() {
         .then((res) => {
           setCollectionData(res.data);
           setRestaurantsList(
-            res.data.data.cards.slice(2, res.data.data.cards.length - 1)
+            res.data.data.cards.slice(2, res.data.data.cards.length)
           );
         });
     }
