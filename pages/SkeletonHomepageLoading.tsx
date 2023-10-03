@@ -4,7 +4,7 @@ import React from "react";
 function SkeletonHomepageLoading() {
   return (
     <div className="w-full mt-20 flex-grow">
-      <div className="w-full bg-gray-900 flex flex-col justify-center items-center h-80 space-y-10">
+      <div className="w-full bg-gray-900 flex flex-col justify-center items-center h-80 space-y-10 p-4">
         <div className="loader animate-spin absolute top-48" />
         <figure>
           <Image
@@ -14,7 +14,7 @@ function SkeletonHomepageLoading() {
             height={35}
           />
         </figure>
-        <p className="font-light text-3xl text-white">
+        <p className="font-light text-2xl sm:text-3xl text-white">
           Looking for great food near you ...
         </p>
       </div>

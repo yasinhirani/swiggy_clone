@@ -26,6 +26,8 @@ function Navbar() {
   const [isLocationModalOpen, setIsLocationModalOpen] =
     useState<boolean>(false);
   const [locationList, setLocationList] = useState<Array<any> | null>(null);
+  const [profileDropdownVisible, setProfileDropdownVisible] =
+    useState<boolean>(false);
 
   const getLocations = (locationName: string) => {
     locationService.getLocation(locationName).then((res) => {
@@ -57,8 +59,8 @@ function Navbar() {
   }, 500);
   return (
     <>
-      <nav className="w-full flex items-center h-20 shadow-xl bg-white fixed top-0 px-6 py-3 z-10">
-        <div className="w-full max-w-[76rem] mx-auto flex justify-between items-center">
+      <nav className="w-full flex h-20 shadow-xl bg-white fixed top-0 px-6 z-10">
+        <div className="w-full max-w-[76rem] mx-auto flex justify-between">
           <div className="flex items-center space-x-3 sm:space-x-8">
             <Link href="/">
               <figure>
@@ -92,60 +94,79 @@ function Navbar() {
             )}
           </div>
           <div>
-            <ul className="flex items-center space-x-8 lg:space-x-12">
-              <li className="hidden lg:list-item">
+            <ul className="flex h-full space-x-8 lg:space-x-12">
+              <li className="hidden lg:list-item h-full">
                 <Link
                   href="/search"
-                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500 h-full"
                 >
                   <MagnifyingGlassIcon className="w-5 h-5" />
                   <span>Search</span>
                 </Link>
               </li>
-              <li className="hidden lg:list-item">
+              <li className="hidden lg:list-item h-full">
                 <Link
                   href="/"
-                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500 h-full"
                 >
                   <GiftIcon className="w-5 h-5" />
                   <span>Offers</span>
                 </Link>
               </li>
-              <li className="hidden lg:list-item">
+              <li className="hidden lg:list-item h-full">
                 <Link
                   href="/support"
-                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
+                  className="text-base font-medium flex items-center space-x-2 hover:text-orange-500 h-full"
                 >
                   <LifebuoyIcon className="w-5 h-5" />
                   <span>Help</span>
                 </Link>
               </li>
-              <li className="hidden lg:list-item">
+              <li className="hidden lg:list-item h-full">
                 {!user && (
                   <Link
                     href="/api/auth/login"
-                    className="text-base font-medium flex items-center space-x-2 hover:text-orange-500"
+                    className="text-base font-medium flex items-center space-x-2 hover:text-orange-500 h-full"
                   >
                     <UserIcon className="w-5 h-5" />
                     <span>{isLoading ? "Please wait" : "Sign In"}</span>
                   </Link>
                 )}
                 {user && (
-                  <Link
-                    href="/api/auth/logout"
-                    className="text-base font-medium flex items-center space-x-2"
+                  <div
+                    className="relative h-full"
+                    onMouseEnter={() =>
+                      setProfileDropdownVisible(!profileDropdownVisible)
+                    }
+                    onMouseLeave={() =>
+                      setProfileDropdownVisible(!profileDropdownVisible)
+                    }
                   >
-                    <UserIcon className="w-5 h-5" />
-                    <span className="w-[10ch] overflow-hidden overflow-ellipsis">
-                      {isLoading ? "Please wait" : user.name}
-                    </span>
-                  </Link>
+                    <Link
+                      href="/api/auth/logout"
+                      className="text-base font-medium flex items-center space-x-2 h-full"
+                    >
+                      <UserIcon className="w-5 h-5" />
+                      <span className="w-[10ch] overflow-hidden overflow-ellipsis">
+                        {isLoading ? "Please wait" : user.name}
+                      </span>
+                    </Link>
+                    {profileDropdownVisible && (
+                      <div className="absolute w-52 left-1/2 -translate-x-1/2 bg-white border-t-2 border-t-orange-500 z-10 p-4 shadow-2xl flex flex-col space-y-1 transition-all">
+                        <div className="w-full absolute -top-[9px] left-0 right-0 flex justify-center">
+                          <div className="absolute w-4 h-4 bg-white border-l-2 border-t-2 border-orange-500 transform rotate-45" />
+                        </div>
+                        <Link href="/profile" className="py-2 font-medium text-base hover:font-semibold">Profile</Link>
+                        <Link href="/api/auth/logout" className="py-2 font-medium text-base hover:font-semibold">Logout</Link>
+                      </div>
+                    )}
+                  </div>
                 )}
               </li>
-              <li>
+              <li className="h-full">
                 <Link
                   href="/checkout"
-                  className="text-base font-medium flex items-center space-x-2 group hover:text-orange-500"
+                  className="text-base font-medium flex items-center space-x-2 group hover:text-orange-500 h-full"
                 >
                   <span className="relative">
                     <small
