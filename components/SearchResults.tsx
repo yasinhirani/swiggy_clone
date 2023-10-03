@@ -3,6 +3,7 @@ import SearchResultRestaurantCard from "./SearchResultRestaurantCard";
 import SearchResultDishCard from "./SearchResultDishCard";
 import { CartContext, CartTotalContext } from "@/core/context";
 import cartTotal from "@/shared/utils/cartTotal";
+import { searchResultType } from "@/core/utils/common";
 
 function SearchResults({ tabs, list }: any) {
   const { CartData, SetCartData } = useContext(CartContext);
@@ -123,17 +124,17 @@ function SearchResults({ tabs, list }: any) {
           })}
       </div>
       <div className="bg-gray-100 px-4 py-6">
-        {list.hasOwnProperty("RESTAURANT") && (
+        {list.hasOwnProperty(searchResultType.RESTAURANT) && (
           <SearchResultRestaurantCard
             maxWidth="max-w-max"
             restaurantInfo={list.RESTAURANT.cards[0].card.card.info}
           />
         )}
-        {list.hasOwnProperty("RESTAURANT") && (
+        {list.hasOwnProperty(searchResultType.RESTAURANT) && (
           <p className="mt-10 mb-5 font-bold text-lg">More results like this</p>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {list.hasOwnProperty("RESTAURANT") &&
+          {list.hasOwnProperty(searchResultType.RESTAURANT) &&
             list.RESTAURANT.cards[1].card.card.restaurants.map(
               (restaurant: any) => {
                 return (
@@ -144,7 +145,7 @@ function SearchResults({ tabs, list }: any) {
                 );
               }
             )}
-          {list.hasOwnProperty("DISH") &&
+          {list.hasOwnProperty(searchResultType.DISH) &&
             list.DISH.cards
               .slice(1, list.DISH.cards.length - 1)
               .map((card: any) => {

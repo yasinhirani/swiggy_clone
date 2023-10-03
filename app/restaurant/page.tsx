@@ -11,15 +11,16 @@ import cartTotal from "@/shared/utils/cartTotal";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useContext, useState } from "react";
 
 function Restaurant() {
   const { locationInfo } = useContext(LocationContext);
   const { CartData, SetCartData } = useContext(CartContext);
-  const { setCartTotal } = useContext(CartTotalContext);
+  const { CartTotal, setCartTotal } = useContext(CartTotalContext);
   const searchParams = useSearchParams();
   const restaurantId = searchParams?.get("restaurantId");
+  const router = useRouter();
 
   const [restaurantData, setRestaurantData] = useState<Array<any>>([]);
   const [restaurantMenu, setRestaurantMenu] = useState<Array<any>>([]);
@@ -28,6 +29,8 @@ function Restaurant() {
   const [vegOnlySelected, setVegOnlySelected] = useState<boolean>(false);
   const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
+  const [menuViewCartFooterVisible, setMenuViewCartFooterVisible] =
+    useState<boolean>(CartData.Items.length > 0);
 
   const getRestaurantMenu = () => {
     if (restaurantId && locationInfo) {
@@ -143,6 +146,7 @@ function Restaurant() {
     }
     localStorage.setItem("cartData", JSON.stringify(CartData));
     setCartTotal(cartTotal(CartData));
+    setMenuViewCartFooterVisible(CartData.Items.length > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CartData]);
   return (
@@ -376,6 +380,23 @@ function Restaurant() {
         </div>
       </div>
       {/* End Modal for info for item already in cart */}
+      {/* Start Item added to cart info */}
+      <div
+        role="button"
+        className={`w-full max-w-[50rem] mx-auto p-3 fixed ${
+          menuViewCartFooterVisible && restaurantData
+            ? "bottom-4"
+            : "-bottom-full"
+        } left-1/2 right-1/2 transform -translate-x-1/2 transition-all bg-[#60b246] flex justify-between items-center`}
+        onClick={() => router.push("/checkout")}
+      >
+        <p className="font-bold text-sm text-white">
+          {CartData.Items.length} {CartData.Items.length > 1 ? "Items" : "Item"}{" "}
+          | ₹{CartTotal}
+        </p>
+        <p className="font-bold text-base text-white">VIEW CART</p>
+      </div>
+      {/* Start Item added to cart info */}
     </div>
   );
 }

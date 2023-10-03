@@ -26,6 +26,11 @@ const SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL =
 const SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_248,h_376/4x_-_Super_fast_delivery_awv7sn";
 
+enum searchResultType {
+  RESTAURANT = "RESTAURANT",
+  DISH = "DISH",
+}
+
 export {
   CORS_BYPASS_URL,
   SWIGGY_CAROUSAL_IMG_URL,
@@ -40,5 +45,6 @@ export {
   SWIGGY_SEARCH_IMG_URL,
   SWIGGY_HERO_NO_MINIMUM_ORDER_IMG_URL,
   SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL,
-  SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL
+  SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL,
+  searchResultType
 };

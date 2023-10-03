@@ -13,6 +13,7 @@ import {
 } from "@/core/context";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import cartTotal from "@/shared/utils/cartTotal";
+import { Toaster } from "react-hot-toast";
 
 const inter = Mukta({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -103,6 +104,7 @@ export default function RootLayout({
               </CartTotalContext.Provider>
             </CartContext.Provider>
           </LocationContext.Provider>
+          <Toaster />
         </body>
       </UserProvider>
     </html>

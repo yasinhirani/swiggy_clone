@@ -2,10 +2,12 @@
 import { CartContext, CartTotalContext } from "@/core/context";
 import cartTotal from "@/shared/utils/cartTotal";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 function Cart() {
   const { CartData, SetCartData } = useContext(CartContext);
@@ -45,6 +47,26 @@ function Cart() {
         });
       }
     }
+  };
+
+  const placeOrder = () => {
+    axios
+      .post("/api/placeOrder", {
+        email: user?.email,
+        cartData: CartData,
+      })
+      .then((res) => {
+        if (res.data.success) {
+          SetCartData({
+            RestaurantDetails: null,
+            Items: [],
+          });
+          toast.success(res.data.message);
+          router.push("/");
+        } else {
+          toast.error("Something went wrong while placing the order.");
+        }
+      });
   };
 
   useEffect(() => {
@@ -107,6 +129,13 @@ function Cart() {
                   <h5 className="font-medium text-xl text-gray-800 mt-5">
                     {user.nickname}
                   </h5>
+                  <button
+                    type="button"
+                    onClick={() => placeOrder()}
+                    className="flex flex-col items-center border border-[#60b246] bg-[#60b246] text-white w-60 px-4 py-2 font-bold mt-5"
+                  >
+                    Place you order
+                  </button>
                 </>
               )}
             </div>
@@ -156,7 +185,10 @@ function Cart() {
                           height={20}
                         />
                       </figure>
-                      <h5 title={item.ItemName} className="font-normal text-base text-gray-800 w-[12ch] sm:w-[16ch] whitespace-nowrap overflow-hidden overflow-ellipsis">
+                      <h5
+                        title={item.ItemName}
+                        className="font-normal text-base text-gray-800 w-[12ch] sm:w-[16ch] whitespace-nowrap overflow-hidden overflow-ellipsis"
+                      >
                         {item.ItemName}
                       </h5>
                     </div>
