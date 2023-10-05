@@ -25,6 +25,10 @@ const SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_224,h_412/4x_Live_order_zzotwy";
 const SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_248,h_376/4x_-_Super_fast_delivery_awv7sn";
+const SWIGGY_NO_ORDER_FOUND_IMG_URL =
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_262/empty-orders-image_acrbbw";
+const SWIGGY_ONE_IMG_URL =
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_720,h_660/swiggy_one/my_account_super";
 
 enum searchResultType {
   RESTAURANT = "RESTAURANT",
@@ -46,5 +50,7 @@ export {
   SWIGGY_HERO_NO_MINIMUM_ORDER_IMG_URL,
   SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL,
   SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL,
+  SWIGGY_NO_ORDER_FOUND_IMG_URL,
+  SWIGGY_ONE_IMG_URL,
   searchResultType
 };

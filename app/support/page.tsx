@@ -34,13 +34,13 @@ function Support() {
   }, [issueTypeSelected]);
   return (
     <div className="mt-20 flex flex-col flex-grow bg-[#37718e] px-6 pt-10">
-      <div className="w-full max-w-[76rem] mx-auto flex-grow flex flex-col">
+      <div className="w-full max-w-[76rem] mx-auto flex-grow flex flex-col mb-16 lg:mb-0">
         <div className="text-white my-9">
           <h2 className="font-extrabold text-4xl">Help & Support</h2>
           <h4 className="font-light text-base mt-1">{`Let's take a step ahead and help you better.`}</h4>
         </div>
-        <div className="w-full bg-white flex-grow flex flex-col md:flex-row md:space-x-8 px-8 py-10">
-          <div className="bg-gray-100 w-full md:w-64 md:min-w-[256px] px-5 md:px-0 md:pl-6 py-6">
+        <div className="w-full bg-gray-50 flex-grow flex flex-col md:flex-row md:space-x-8 px-8 py-10">
+          <div className="bg-gray-200 w-full md:w-64 md:min-w-[256px] px-5 md:px-0 md:pl-6 py-6">
             <ul className="flex flex-col">
               {supportIssues.map((issue) => {
                 return (

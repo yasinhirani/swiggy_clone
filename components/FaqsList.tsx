@@ -4,7 +4,7 @@ import React, { useState } from "react";
 function FaqsList({ faq }: any) {
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
   return (
-    <div className="bg-white py-4">
+    <div className="py-4">
       <div
         role="button"
         onClick={() => setIsFaqOpen(!isFaqOpen)}

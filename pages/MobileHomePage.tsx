@@ -101,7 +101,7 @@ function MobileHomePage() {
     <>
       {swiggyData !== null ? (
         swiggyData.data.cards[0].card.card.id === "swiggy_not_present" ? (
-          <div className="mt-20">
+          <div className="mt-20 mb-16 lg:mb-0">
             <div className="w-full max-w-[25rem] mx-auto px-6 py-7 flex flex-col items-center mt-20">
               <figure>
                 <Image
@@ -141,10 +141,10 @@ function MobileHomePage() {
             <AppDownload swiggyData={swiggyData} swiggyPresent={false} />
           </div>
         ) : (
-          <div className="mt-20">
+          <div className="mt-20 flex-grow flex flex-col">
             {swiggyData !== null && (
-              <>
-                <div className="w-full max-w-[92rem] mx-auto px-6 py-7">
+              <div className="mb-16 lg:mb-0 flex-grow flex flex-col">
+                <div className="w-full max-w-[92rem] mx-auto flex-grow px-6 py-7">
                   {/* Start Best offers */}
                   <div>
                     <div className="flex justify-between items-center space-x-5">
@@ -279,7 +279,7 @@ function MobileHomePage() {
                   {/* End Restaurants with online food delivery */}
                 </div>
                 <AppDownload swiggyData={swiggyData} swiggyPresent />
-              </>
+              </div>
             )}
           </div>
         )

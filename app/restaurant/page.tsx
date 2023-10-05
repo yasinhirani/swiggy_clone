@@ -150,9 +150,9 @@ function Restaurant() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CartData]);
   return (
-    <div className="mt-20 flex-grow px-6 py-10 relative">
+    <div className="mt-20 flex-grow flex flex-col relative">
       {restaurantData.length > 0 && (
-        <div className="w-full max-w-[50rem] mx-auto">
+        <div className="w-full max-w-[50rem] mx-auto flex-grow px-6 py-10 mb-16 lg:mb-0">
           <p className="font-normal text-xs text-gray-500">
             <Link href="/">Home</Link>/{" "}
             {locationInfo?.address_components[0].long_name} /{" "}
@@ -352,7 +352,7 @@ function Restaurant() {
       {/* Start Modal for info for item already in cart */}
       <div
         className={`fixed ${
-          infoModalVisible ? "bottom-8" : "-bottom-full"
+          infoModalVisible ? "bottom-0 sm:bottom-8" : "-bottom-full"
         } left-1/2 transform -translate-x-1/2 bg-white p-6 z-30 w-full max-w-[500px] min-w-[300px] info-modal`}
       >
         <h2 className="font-bold text-2xl text-gray-700">
@@ -366,14 +366,14 @@ function Restaurant() {
           <button
             type="button"
             onClick={() => setInfoModalVisible(false)}
-            className="w-full border border-[#60b246] text-[#60b246] px-4 py-2 uppercase"
+            className="w-full border border-[#60b246] text-[#60b246] px-4 py-2 uppercase text-sm sm:text-base"
           >
             No
           </button>
           <button
             type="button"
             onClick={() => resetCartForNewOrder()}
-            className="w-full border border-[#60b246] bg-[#60b246] text-white px-4 py-2 uppercase"
+            className="w-full border border-[#60b246] bg-[#60b246] text-white px-4 py-2 uppercase text-sm sm:text-base"
           >
             yes, start afresh
           </button>
@@ -385,7 +385,7 @@ function Restaurant() {
         role="button"
         className={`w-full max-w-[50rem] mx-auto p-3 fixed ${
           menuViewCartFooterVisible && restaurantData
-            ? "bottom-4"
+            ? "bottom-16 lg:bottom-4"
             : "-bottom-full"
         } left-1/2 right-1/2 transform -translate-x-1/2 transition-all bg-[#60b246] flex justify-between items-center`}
         onClick={() => router.push("/checkout")}
