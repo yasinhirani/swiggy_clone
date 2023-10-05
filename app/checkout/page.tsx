@@ -81,7 +81,7 @@ function Cart() {
   return (
     <div className="mt-20 flex-grow bg-gray-100 flex flex-col">
       {CartData.Items.length > 0 ? (
-        <div className="w-full max-w-[76rem] mx-auto p-5 flex flex-col-reverse sm:flex-row sm:space-x-8">
+        <div className="w-full max-w-[76rem] mx-auto p-5 flex-grow flex flex-col-reverse sm:flex-row sm:space-x-8 px-6 py-10 mb-16 lg:mb-0">
           {/* Start Left section */}
           <div className="w-full sm:flex-grow mt-6 sm:mt-0">
             <div className="bg-white p-6">
@@ -261,7 +261,7 @@ function Cart() {
           {/* End Right section */}
         </div>
       ) : (
-        <div className="flex-grow flex justify-center items-center p-5">
+        <div className="flex-grow flex justify-center items-center p-5 mb-16 lg:mb-0">
           <div className="flex flex-col items-center">
             <figure>
               <Image

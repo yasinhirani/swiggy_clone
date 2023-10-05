@@ -82,7 +82,7 @@ function Navbar() {
                 <span className="border-b-2 border-black font-extrabold group-hover:text-orange-500 group-hover:border-orange-500">
                   Other
                 </span>
-                <span className="pl-2 text-gray-500 font-normal whitespace-nowrap w-full max-w-[25ch] overflow-hidden overflow-ellipsis">
+                <span className="pl-2 text-gray-500 font-normal whitespace-nowrap w-full max-w-[12ch] sm:max-w-[25ch] overflow-hidden overflow-ellipsis">
                   {locationInfo?.formatted_address}
                 </span>
                 <ChevronDownIcon className="w-5 h-5 text-orange-500 ml-2" />
@@ -156,8 +156,18 @@ function Navbar() {
                         <div className="w-full absolute -top-[9px] left-0 right-0 flex justify-center">
                           <div className="absolute w-4 h-4 bg-white border-l-2 border-t-2 border-orange-500 transform rotate-45" />
                         </div>
-                        <Link href="/profile" className="py-2 font-medium text-base hover:font-semibold">Profile</Link>
-                        <Link href="/api/auth/logout" className="py-2 font-medium text-base hover:font-semibold">Logout</Link>
+                        <Link
+                          href="/profile"
+                          className="py-2 font-medium text-base hover:font-semibold"
+                        >
+                          Profile
+                        </Link>
+                        <Link
+                          href="/api/auth/logout"
+                          className="py-2 font-medium text-base hover:font-semibold"
+                        >
+                          Logout
+                        </Link>
                       </div>
                     )}
                   </div>
@@ -252,6 +262,61 @@ function Navbar() {
             No location found
           </p>
         )}
+      </div>
+      <div className="w-full bg-gray-50 fixed bottom-0 h-16 z-10 block lg:hidden px-5 border-t border-gray-300">
+        <ul className="flex justify-between h-full space-x-6 lg:space-x-8">
+          <li className="h-full">
+            <Link
+              href="/search"
+              className="text-sm font-medium flex flex-col justify-center items-center space-y-1 text-gray-700 h-full"
+            >
+              <MagnifyingGlassIcon className="w-5 h-5" />
+              <span>Search</span>
+            </Link>
+          </li>
+          <li className="h-full">
+            <Link
+              href="/"
+              className="text-sm font-medium flex flex-col justify-center items-center space-y-1 text-gray-700 h-full"
+            >
+              <GiftIcon className="w-5 h-5" />
+              <span>Offers</span>
+            </Link>
+          </li>
+          <li className="h-full">
+            <Link
+              href="/support"
+              className="text-sm font-medium flex flex-col justify-center items-center space-y-1 text-gray-700 h-full"
+            >
+              <LifebuoyIcon className="w-5 h-5" />
+              <span>Help</span>
+            </Link>
+          </li>
+          <li className="h-full">
+            {!user && (
+              <Link
+                href="/api/auth/login"
+                className="text-sm font-medium flex flex-col justify-center items-center space-y-1 text-gray-700 h-full"
+              >
+                <UserIcon className="w-5 h-5" />
+                <span>{isLoading ? "Please wait" : "Sign In"}</span>
+              </Link>
+            )}
+            {user && (
+              <div className="relative h-full">
+                <Link
+                  href="/profile"
+                  className="text-sm font-medium flex flex-col justify-center items-center space-y-1 h-full"
+                >
+                  <UserIcon className="w-5 h-5" />
+                  <span className="w-[8ch] overflow-hidden overflow-ellipsis">
+                    {isLoading ? "Please wait" : user.name}
+                  </span>
+                </Link>
+              </div>
+            )}
+          </li>
+        </ul>
       </div>
     </>
   );

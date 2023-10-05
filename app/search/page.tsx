@@ -86,8 +86,8 @@ function Search() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
   return (
-    <div className="mt-20 flex-grow">
-      <div className="w-full max-w-[55rem] mx-auto p-5">
+    <div className="mt-20 flex-grow flex flex-col">
+      <div className="w-full max-w-[55rem] mx-auto flex-grow p-5 mb-16 lg:mb-0">
         <div className="mt-8 border border-gray-400 rounded w-full px-4 py-3 flex justify-between items-center space-x-5">
           <input
             ref={searchTextRef}

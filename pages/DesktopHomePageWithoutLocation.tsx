@@ -9,9 +9,11 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import { debounce } from "lodash";
 import Image from "next/image";
 import React, { useContext, useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 function DesktopHomePageWithoutLocation() {
   const { setLocationInfo } = useContext(LocationContext);
+  const { user, isLoading } = useUser();
   const popularCities = [
     "Ahmedabad",
     "Bangalore",
@@ -66,14 +68,18 @@ function DesktopHomePageWithoutLocation() {
                   height={150}
                 />
               </figure>
-              <div className="flex items-center space-x-2">
-                <button className="w-28 font-semibold bg-white px-3 py-2">
-                  Login
-                </button>
-                <button className="w-28 font-semibold bg-black text-white px-3 py-2">
-                  Sign up
-                </button>
-              </div>
+              {!isLoading && !user ? (
+                <div className="flex items-center space-x-2">
+                  <button className="w-28 font-semibold bg-white px-3 py-2">
+                    Login
+                  </button>
+                  <button className="w-28 font-semibold bg-black text-white px-3 py-2">
+                    Sign up
+                  </button>
+                </div>
+              ) : (
+                <h2 className="font-bold text-lg text-gray-600">{user?.nickname}</h2>
+              )}
             </div>
             <div>
               <h2 className="font-bold text-[40px] text-gray-700">
