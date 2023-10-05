@@ -213,7 +213,7 @@ function DesktopHomePage() {
                                     return;
                                   }
                                 }}
-                                key={Math.random()}
+                                key={data.id}
                               >
                                 <figure>
                                   <Image
@@ -282,7 +282,7 @@ function DesktopHomePage() {
                                     `/collections?collectionId=${collectionId}`
                                   );
                                 }}
-                                key={Math.random()}
+                                key={data.id}
                               >
                                 <figure>
                                   <Image
@@ -367,7 +367,7 @@ function DesktopHomePage() {
                         filterList.map((list) => {
                           return (
                             <button
-                              key={Math.random()}
+                              key={list.id}
                               onClick={() =>
                                 applyFilters(list.id, list.facetInfo[0].id)
                               }

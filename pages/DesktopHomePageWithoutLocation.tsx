@@ -10,6 +10,7 @@ import { debounce } from "lodash";
 import Image from "next/image";
 import React, { useContext, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Link from "next/link";
 
 function DesktopHomePageWithoutLocation() {
   const { setLocationInfo } = useContext(LocationContext);
@@ -60,7 +61,7 @@ function DesktopHomePageWithoutLocation() {
         <div className="w-full max-w-[76rem] h-auto lg:h-[500px] mx-auto p-5">
           <div className="w-full lg:w-[680px] lg:pr-20">
             <div className="flex justify-between items-start space-x-5">
-              <figure>
+              <figure className="hidden sm:block">
                 <Image
                   src="/images/swiggy_with_text.svg"
                   alt="swiggy"
@@ -68,20 +69,37 @@ function DesktopHomePageWithoutLocation() {
                   height={150}
                 />
               </figure>
+              <figure className="block sm:hidden">
+                <Image
+                  src="/images/swiggy.svg"
+                  alt="Swiggy"
+                  width={40}
+                  height={40}
+                  className="w-8 h-8 min-w-[32px] sm:w-12 sm:h-12 hover:scale-110 transition-transform"
+                />
+              </figure>
               {!isLoading && !user ? (
                 <div className="flex items-center space-x-2">
-                  <button className="w-28 font-semibold bg-white px-3 py-2">
+                  <Link
+                    href="/api/auth/login"
+                    className="w-28 font-semibold bg-white px-3 py-2 text-center"
+                  >
                     Login
-                  </button>
-                  <button className="w-28 font-semibold bg-black text-white px-3 py-2">
+                  </Link>
+                  <Link
+                    href="/api/auth/login"
+                    className="w-28 font-semibold bg-black text-white px-3 py-2 text-center"
+                  >
                     Sign up
-                  </button>
+                  </Link>
                 </div>
               ) : (
-                <h2 className="font-bold text-lg text-gray-600">{user?.nickname}</h2>
+                <h2 className="font-bold text-lg text-gray-600">
+                  {user?.nickname}
+                </h2>
               )}
             </div>
-            <div>
+            <div className="mt-8 sm:mt-0">
               <h2 className="font-bold text-[40px] text-gray-700">
                 Cooking gone wrong?
               </h2>
@@ -109,7 +127,7 @@ function DesktopHomePageWithoutLocation() {
                       return (
                         <button
                           type="button"
-                          key={Math.random()}
+                          key={suggestion.place_id}
                           onClick={() => getLocationInfo(suggestion.place_id)}
                           className="flex items-start space-x-5 w-full text-left group"
                         >

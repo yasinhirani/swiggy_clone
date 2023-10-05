@@ -12,7 +12,6 @@ function TopRestaurantCard({ data }: any) {
         router.push(`/restaurant?name=${data.info.name}&restaurantId=${data.info.feeDetails.restaurantId}`)
       }}
       className="w-72 h-full hover:scale-95 transition-transform"
-      key={Math.random()}
     >
       <figure className="w-72 h-48 relative rounded-xl overflow-hidden">
         <Image

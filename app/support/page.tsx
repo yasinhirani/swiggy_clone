@@ -44,7 +44,7 @@ function Support() {
             <ul className="flex flex-col">
               {supportIssues.map((issue) => {
                 return (
-                  <li key={Math.random()}>
+                  <li key={issue.type}>
                     <button
                       onClick={() => setIssueTypeSelected(issue.type)}
                       className={`px-6 md:px-0 md:pl-16 md:pr-6 py-6 ${

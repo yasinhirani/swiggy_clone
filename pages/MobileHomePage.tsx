@@ -214,7 +214,7 @@ function MobileHomePage() {
                                     return;
                                   }
                                 }}
-                                key={Math.random()}
+                                key={data.id}
                               >
                                 <figure>
                                   <Image
@@ -243,7 +243,7 @@ function MobileHomePage() {
                         filterList.map((list) => {
                           return (
                             <button
-                              key={Math.random()}
+                              key={list.id}
                               onClick={() =>
                                 applyFilters(list.id, list.facetInfo[0].id)
                               }
