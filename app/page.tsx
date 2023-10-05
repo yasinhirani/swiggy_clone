@@ -1,8 +1,8 @@
 "use client";
 import { LoadingContext, LocationContext } from "@/core/context";
-import DesktopHomePage from "@/pages/DesktopHomePage";
-import DesktopHomePageWithoutLocation from "@/pages/DesktopHomePageWithoutLocation";
-import MobileHomePage from "@/pages/MobileHomePage";
+import DesktopHomePage from "@/core/components/DesktopHomePage";
+import DesktopHomePageWithoutLocation from "@/core/components/DesktopHomePageWithoutLocation";
+import MobileHomePage from "@/core/components/MobileHomePage";
 import { useContext, useEffect } from "react";
 
 function Home() {
