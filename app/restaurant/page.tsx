@@ -238,7 +238,7 @@ function Restaurant() {
               (offer: any) => {
                 return (
                   <div
-                    key={Math.random()}
+                    key={offer.info.offerIds[0]}
                     className="border border-gray-200 rounded-md pl-2 pr-8 py-2 flex flex-col items-start"
                   >
                     <div className="flex items-center space-x-2">

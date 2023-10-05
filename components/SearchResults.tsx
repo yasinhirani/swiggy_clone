@@ -111,7 +111,7 @@ function SearchResults({ tabs, list }: any) {
           tabs.map((tab: any) => {
             return (
               <button
-                key={Math.random()}
+                key={tab.id}
                 className={`border ${
                   tab.hasOwnProperty("selected") && tab.selected
                     ? "bg-[#1B1E24] border-[#1B1E24] text-white"

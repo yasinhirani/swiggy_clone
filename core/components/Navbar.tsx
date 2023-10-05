@@ -239,7 +239,7 @@ function Navbar() {
               return (
                 <button
                   type="button"
-                  key={Math.random()}
+                  key={list.place_id}
                   onClick={() => getLocationInfo(list.place_id)}
                   className="flex items-start space-x-5 w-full text-left group"
                 >

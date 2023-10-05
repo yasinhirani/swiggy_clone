@@ -169,7 +169,7 @@ function Cart() {
               {CartData.Items.map((item) => {
                 return (
                   <div
-                    key={Math.random()}
+                    key={item.ItemId}
                     className="flex justify-between items-center space-x-3"
                   >
                     <div className="flex items-center space-x-2">
