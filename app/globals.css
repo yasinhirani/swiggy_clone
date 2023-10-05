@@ -2,26 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
+html,
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  width: 100%;
+  height: 100%;
+}
+
+/* Hide the scrollbar */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  scroll-behavior: smooth;
+}
+
+.bg-linear-black-to-white {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+}
+
+/* Spinner Loader */
+.loader {
+  width: 60px;
+  height: 60px;
+  border-right: 4px solid;
+  border-left: 4px solid;
+  border-bottom: 4px solid;
+  border-top: 4px solid;
+  border-radius: 50%;
+  @apply border-gray-500;
+  border-top-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Info modal for item already in cart by different restaurant */
+.info-modal{
+  box-shadow: 0 2px 20px 0 rgba(40,44,63,.5);
+  transition: all .2s ease-in-out;
+}
+
+/* Hero section css */
+.hero{
+  position: absolute;
+  background-color: gray;
+  background-image: url("https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_1340/Lunch1_vlksgq");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  left: calc(50% + 150px);
+  right: 0;
+  top: 0;
 }
