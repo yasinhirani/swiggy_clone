@@ -139,7 +139,7 @@ function SearchResults({ tabs, list }: any) {
               (restaurant: any) => {
                 return (
                   <SearchResultRestaurantCard
-                    key={Math.random()}
+                    key={restaurant.info.id}
                     restaurantInfo={restaurant.info}
                   />
                 );
@@ -151,7 +151,7 @@ function SearchResults({ tabs, list }: any) {
               .map((card: any) => {
                 return (
                   <SearchResultDishCard
-                    key={Math.random()}
+                    key={card.card.card.info.id}
                     dishInfo={card.card.card}
                     addToCart={addToCart}
                   />

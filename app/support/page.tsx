@@ -68,7 +68,7 @@ function Support() {
               faqs.map((faq, index: number) => {
                 return (
                   <>
-                    <FaqsList key={Math.random()} faq={faq} />
+                    <FaqsList key={faq.id} faq={faq} />
                     {index < faqs.length - 1 && (
                       <hr className="my-2 border-gray-300" />
                     )}

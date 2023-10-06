@@ -52,7 +52,7 @@ function Collections() {
             {restaurantsList &&
               restaurantsList.map((data: any) => {
                 return (
-                  <RestaurantCard key={Math.random()} data={data.card.card} />
+                  <RestaurantCard key={data.card.card.info.id} data={data.card.card} />
                 );
               })}
           </div>

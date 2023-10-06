@@ -266,7 +266,7 @@ function MobileHomePage() {
                         restaurantList.length > 0 &&
                         restaurantList.map((data: any) => {
                           return (
-                            <RestaurantCard key={Math.random()} data={data} />
+                            <RestaurantCard key={data.info.id} data={data} />
                           );
                         })}
                     </div>
