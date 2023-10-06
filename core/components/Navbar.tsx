@@ -231,7 +231,7 @@ function Navbar() {
           autoComplete="off"
           onChange={(e) => handleInputChangeForLocationFetch(e.target.value)}
           placeholder="Search for area, street name..."
-          className="w-full border border-gray-300 shadow-md px-4 py-3 outline-none"
+          className="w-full border border-gray-300 shadow-md px-4 py-3 rounded-none outline-none"
         />
         {locationList && locationList.length > 0 && (
           <div className="mt-10 space-y-8">

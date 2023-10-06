@@ -49,7 +49,7 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
               height={20}
             />
           </figure>
-          <h6 className="mt-2 font-medium text-gray-600 text-xl">
+          <h6 className="mt-2 font-medium text-gray-600 text-base sm:text-xl">
             {dishInfo.info.name}
           </h6>
           <p className="mt-1 font-normal text-base text-gray-600">
@@ -81,7 +81,7 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
               alt={""}
               width={120}
               height={120}
-              className="w-32 min-w-[128px] h-24 rounded-lg object-cover"
+              className="w-28 h-24 min-w-[112px] sm:w-32 sm:h-24 sm:min-w-[128px] rounded-lg object-cover"
             />
           )}
           <figcaption>

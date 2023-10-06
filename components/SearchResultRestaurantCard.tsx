@@ -34,7 +34,7 @@ function SearchResultRestaurantCard({ maxWidth, restaurantInfo }: IProps) {
         />
       </figure>
       <div className="flex-grow overflow-hidden">
-        <h5 className="font-semibold text-xl text-gray-700">
+        <h5 className="font-semibold text-base sm:text-xl text-gray-700">
           {restaurantInfo.name}
         </h5>
         <h6 className="font-normal text-sm text-gray-500 mt-1">
