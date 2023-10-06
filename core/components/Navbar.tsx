@@ -45,6 +45,7 @@ function Navbar() {
       localStorage.setItem("userLocation", JSON.stringify(res.data.data[0]));
       setLocationList(null);
       setIsLocationModalOpen(false);
+      document.body.classList.remove("overflow-hidden");
       router.push("/");
     });
   };
@@ -76,7 +77,10 @@ function Navbar() {
             {pathName && !pathName?.includes("support") ? (
               <button
                 type="button"
-                onClick={() => setIsLocationModalOpen(true)}
+                onClick={() => {
+                  setIsLocationModalOpen(true);
+                  document.body.classList.add("overflow-hidden");
+                }}
                 className="text-sm flex items-center group"
               >
                 <span className="border-b-2 border-black font-extrabold group-hover:text-orange-500 group-hover:border-orange-500">
@@ -215,12 +219,13 @@ function Navbar() {
           onClick={() => {
             setLocationList(null);
             setIsLocationModalOpen(false);
+            document.body.classList.remove("overflow-hidden");
           }}
-          className="absolute inset-0 bg-black bg-opacity-25 z-20"
+          className="fixed inset-0 bg-black bg-opacity-25 z-20"
         />
       )}
       <div
-        className={`w-72 sm:w-96 h-full absolute ${
+        className={`w-72 sm:w-96 h-full fixed ${
           isLocationModalOpen ? "left-0" : "-left-full"
         } bg-white z-30 transition-all px-6 py-10`}
       >
