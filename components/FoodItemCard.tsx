@@ -30,7 +30,9 @@ function FoodItemCard({ foodData, addToCart }: any) {
             </div>
           )}
         </div>
-        <h4 className="font-medium text-lg text-gray-800">{foodData.name}</h4>
+        <h4 className="font-medium text-base sm:text-lg text-gray-800">
+          {foodData.name}
+        </h4>
         <p className="font-normal text-sm">
           ₹{foodData.price / 100 || foodData.defaultPrice / 100}
         </p>
@@ -44,7 +46,7 @@ function FoodItemCard({ foodData, addToCart }: any) {
             alt={foodData.name}
             width={120}
             height={120}
-            className="w-32 h-24 rounded-lg object-cover"
+            className="w-28 h-24 min-w-[112px] sm:w-32 sm:h-24 sm:min-w-[128px] rounded-lg object-cover"
           />
         )}
         <figcaption>
@@ -55,7 +57,7 @@ function FoodItemCard({ foodData, addToCart }: any) {
                 foodData.id,
                 foodData.isVeg ? true : false,
                 foodData.name,
-                foodData.price / 100,
+                foodData.price / 100 || foodData.defaultPrice / 100,
                 false
               )
             }

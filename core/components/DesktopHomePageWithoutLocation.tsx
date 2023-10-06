@@ -109,7 +109,7 @@ function DesktopHomePageWithoutLocation() {
               <div className="mt-8 flex items-center relative">
                 <input
                   type="text"
-                  className="border border-gray-300 px-5 py-3 w-full font-medium text-base placeholder:font-semibold outline-none"
+                  className="border border-gray-300 px-5 py-3 w-full font-medium text-base placeholder:font-semibold rounded-none outline-none"
                   name="locationName"
                   id="locationName"
                   onChange={(e) => getSuggestions(e.target.value)}

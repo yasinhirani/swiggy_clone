@@ -3,11 +3,7 @@ import AppDownload from "@/components/AppDownload";
 import RestaurantCard from "@/components/RestaurantCard";
 import TopRestaurantCard from "@/components/TopRestaurantCard";
 import { LocationContext } from "@/core/context";
-import {
-  SWIGGY_CAROUSAL_IMG_URL,
-  SWIGGY_CAROUSAL_MOBILE_IMG_URL,
-  SWIGGY_WHATS_ON_MIND_IMG_URL,
-} from "@/core/utils/common";
+import { SWIGGY_CAROUSAL_MOBILE_IMG_URL } from "@/core/utils/common";
 import swiggyServices from "@/shared/service/swiggy.service";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -20,8 +16,6 @@ function MobileHomePage() {
   const { locationInfo } = useContext(LocationContext);
   const router = useRouter();
   const bestOffersScrollRef = useRef<HTMLDivElement>(null);
-  const whatsOnYourMindScrollRef = useRef<HTMLDivElement>(null);
-  const topRestaurantChainScrollRef = useRef<HTMLDivElement>(null);
   const [swiggyData, setSwiggyData] = useState<any>(null);
   const [restaurantList, setRestaurantList] = useState<Array<any>>([]);
   const [filterList, setFilterList] = useState<Array<any>>([]);
@@ -91,6 +85,7 @@ function MobileHomePage() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (locationInfo) {
       setSwiggyData(null);
       getSwiggyData();
