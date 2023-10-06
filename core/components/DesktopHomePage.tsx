@@ -344,7 +344,7 @@ function DesktopHomePage() {
                           (data: any) => {
                             return (
                               <TopRestaurantCard
-                                key={Math.random()}
+                                key={data.info.id}
                                 data={data}
                               />
                             );
@@ -395,7 +395,7 @@ function DesktopHomePage() {
                         restaurantList.length > 0 &&
                         restaurantList.map((data: any) => {
                           return (
-                            <RestaurantCard key={Math.random()} data={data} />
+                            <RestaurantCard key={data.info.id} data={data} />
                           );
                         })}
                     </div>

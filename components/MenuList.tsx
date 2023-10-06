@@ -40,7 +40,7 @@ function MenuList({ menu, isVegOnlySelected, addToCart }: any) {
           >
             {menuItems.map((items: any, index: number) => {
               return (
-                <div key={Math.random()}>
+                <div key={items.card.info.id}>
                   <FoodItemCard foodData={items.card.info} addToCart={addToCart} />
                   {index < menu.itemCards.length - 1 && (
                     <hr className="mt-8 mb-4 border-gray-300" />
