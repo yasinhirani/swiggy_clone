@@ -1,5 +1,5 @@
 "use client";
-import MenuList from "@/components/MenuList";
+import MenuListCard from "@/components/MenuListCard";
 import { CartContext, CartTotalContext, LocationContext } from "@/core/context";
 import {
   SWIGGY_FSSAI_IMG_URL,
@@ -301,7 +301,7 @@ function Restaurant() {
               .filter((menu) => menu.card.card.hasOwnProperty("itemCards"))
               .map((menu) => {
                 return (
-                  <MenuList
+                  <MenuListCard
                     key={Math.random()}
                     menu={menu.card.card}
                     isVegOnlySelected={vegOnlySelected}

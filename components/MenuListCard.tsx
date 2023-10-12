@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import FoodItemCard from "./FoodItemCard";
 
-function MenuList({ menu, isVegOnlySelected, addToCart }: any) {
+function MenuListCard({ menu, isVegOnlySelected, addToCart }: any) {
   const [isMenuListOpen, setIsMenuListOpen] = useState<boolean>(true);
   const [menuItems, setMenuItems] = useState<Array<any>>(menu.itemCards);
 
@@ -55,4 +55,4 @@ function MenuList({ menu, isVegOnlySelected, addToCart }: any) {
   );
 }
 
-export default MenuList;
+export default MenuListCard;
