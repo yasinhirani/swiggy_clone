@@ -1,7 +1,3 @@
-interface ICartContext {
-  CartData: ICartData;
-  SetCartData: React.Dispatch<React.SetStateAction<ICartData>>;
-}
 interface ICartData {
   RestaurantDetails?: ICartRestaurantDetails | null;
   Items: ICartItems[];
@@ -19,9 +15,4 @@ interface ICartItems {
   Quantity: number;
   Price: number;
   Total: number;
-}
-
-interface ICartTotalContext {
-  CartTotal: number;
-  setCartTotal: React.Dispatch<React.SetStateAction<number>>;
 }

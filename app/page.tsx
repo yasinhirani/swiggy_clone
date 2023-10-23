@@ -1,22 +1,26 @@
 "use client";
-import { LoadingContext, LocationContext } from "@/core/context";
 import DesktopHomePage from "@/core/components/DesktopHomePage";
 import DesktopHomePageWithoutLocation from "@/core/components/DesktopHomePageWithoutLocation";
 import MobileHomePage from "@/core/components/MobileHomePage";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { IState } from "@/shared/model/state.mode";
 
 function Home() {
-  const { locationInfo } = useContext(LocationContext);
-  const { loading } = useContext(LoadingContext);
+  const locationState = useSelector((state: IState) => state.location);
+  const loadingState = useSelector((state: IState) => state.loading);
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    console.log(loadingState.isLoading);
+  }, [loadingState]);
   return (
     <>
-      {!loading &&
-        locationInfo &&
+      {!loadingState.isLoading &&
+        locationState.place_id &&
         (window.innerWidth > 920 ? <DesktopHomePage /> : <MobileHomePage />)}
-      {!loading && !locationInfo && <DesktopHomePageWithoutLocation />}
+      {!loadingState.isLoading && !locationState.place_id && (
+        <DesktopHomePageWithoutLocation />
+      )}
     </>
   );
 }
