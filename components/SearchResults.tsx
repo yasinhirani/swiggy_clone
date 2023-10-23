@@ -1,24 +1,67 @@
 import React, { useContext, useEffect, useState } from "react";
 import SearchResultRestaurantCard from "./SearchResultRestaurantCard";
 import SearchResultDishCard from "./SearchResultDishCard";
-import { CartContext, CartTotalContext } from "@/core/context";
-import cartTotal from "@/shared/utils/cartTotal";
 import { searchResultType } from "@/core/utils/common";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "@/features/addToCart/addToCart";
+import { IState } from "@/shared/model/state.mode";
 
 function SearchResults({ tabs, list }: any) {
-  const { CartData, SetCartData } = useContext(CartContext);
-  const { setCartTotal } = useContext(CartTotalContext);
+  const dispatch = useDispatch();
+  const cartRestaurantState = useSelector(
+    (state: IState) => state.cart.RestaurantDetails
+  );
+
   const [cartItem, setCartItem] = useState<ICartItems | null>(null);
   const [restaurantDataState, setRestaurantDataState] =
     useState<ICartRestaurantDetails | null>(null);
   const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
+
+  const handleAddToCart = (
+    itemId: string,
+    isVeg: boolean,
+    itemName: string,
+    price: number,
+    isAfreshStart: boolean,
+    restaurantData: ICartRestaurantDetails
+  ) => {
+    const RestaurantDetail: ICartRestaurantDetails = restaurantData;
+
+    const itemToAdd: ICartItems = {
+      ItemId: itemId,
+      IsVeg: isVeg,
+      ItemName: itemName,
+      Price: price,
+      Quantity: 1,
+      Total: price,
+    };
+
+    setCartItem(itemToAdd);
+    setRestaurantDataState(RestaurantDetail);
+
+    if (
+      cartRestaurantState !== null &&
+      restaurantData.RestaurantId !== cartRestaurantState?.RestaurantId &&
+      !isAfreshStart
+    ) {
+      setInfoModalVisible(true);
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        updateDetails: {
+          RestaurantDetail,
+          Item: itemToAdd,
+        },
+        isAfreshStart,
+      })
+    );
+  };
 
   const resetCartForNewOrder = () => {
-    SetCartData({ Items: [], RestaurantDetails: null });
     if (cartItem && restaurantDataState) {
-      console.log(cartItem);
-      addToCart(
+      handleAddToCart(
         cartItem.ItemId,
         cartItem.IsVeg,
         cartItem.ItemName,
@@ -30,80 +73,6 @@ function SearchResults({ tabs, list }: any) {
     setInfoModalVisible(false);
   };
 
-  const addToCart = (
-    itemId: string,
-    isVeg: boolean,
-    itemName: string,
-    price: number,
-    isAfreshStart: boolean,
-    restaurantData: ICartRestaurantDetails
-  ) => {
-    let copyCart = [...CartData.Items];
-    let itemToAdd: ICartItems = {
-      ItemId: itemId,
-      IsVeg: isVeg,
-      ItemName: itemName,
-      Price: price,
-      Quantity: 1,
-      Total: price,
-    };
-    setRestaurantDataState(restaurantData);
-    setCartItem(itemToAdd);
-    // Start Add initial Product and restaurant details to cart
-    if (copyCart.length === 0 || isAfreshStart) {
-      const restaurantDetails: ICartRestaurantDetails = {
-        RestaurantId: restaurantData.RestaurantId || "",
-        RestaurantImage: restaurantData.RestaurantImage,
-        RestaurantLocation: restaurantData.RestaurantLocation,
-        RestaurantName: restaurantData.RestaurantName,
-      };
-      copyCart = [];
-      copyCart.push(itemToAdd);
-      SetCartData({
-        RestaurantDetails: restaurantDetails,
-        Items: copyCart,
-      });
-      console.log("run");
-      return;
-    }
-    // End Add initial Product and restaurant details to cart
-    // Start check if restaurant is same or different
-    if (
-      CartData.RestaurantDetails?.RestaurantId !== restaurantData?.RestaurantId
-    ) {
-      setInfoModalVisible(true);
-      return;
-    }
-    // End check if restaurant is same or different
-    // Start add/update to cart if same restaurant
-    const itemIndex = copyCart.findIndex((item) => item.ItemId === itemId);
-    if (itemIndex === -1) {
-      copyCart.push(itemToAdd);
-      SetCartData({
-        Items: copyCart,
-        RestaurantDetails: CartData.RestaurantDetails,
-      });
-    } else {
-      copyCart[itemIndex].Quantity = copyCart[itemIndex].Quantity + 1;
-      copyCart[itemIndex].Total =
-        copyCart[itemIndex].Quantity * copyCart[itemIndex].Price;
-      SetCartData({
-        Items: copyCart,
-        RestaurantDetails: CartData.RestaurantDetails,
-      });
-    }
-    // End add/update to cart if same restaurant
-  };
-
-  useEffect(() => {
-    if (initialLoad) {
-      setInitialLoad(false);
-      return;
-    }
-    localStorage.setItem("cartData", JSON.stringify(CartData));
-    setCartTotal(cartTotal(CartData));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [CartData]);
   return (
     <div className="mt-5 relative">
       <div className="flex items-center space-x-3 mb-5">
@@ -153,7 +122,7 @@ function SearchResults({ tabs, list }: any) {
                   <SearchResultDishCard
                     key={card.card.card.info.id}
                     dishInfo={card.card.card}
-                    addToCart={addToCart}
+                    addToCart={handleAddToCart}
                   />
                 );
               })}

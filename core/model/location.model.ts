@@ -24,7 +24,3 @@ export interface ILocationInfo {
   types: string[];
   place_type: string;
 }
-export interface ILocationContext {
-  locationInfo: ILocationInfo | null;
-  setLocationInfo: React.Dispatch<React.SetStateAction<ILocationInfo | null>>;
-}

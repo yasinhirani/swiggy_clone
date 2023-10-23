@@ -4,15 +4,16 @@ import Image from "next/image";
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { debounce } from "lodash";
 import swiggyServices from "@/shared/service/swiggy.service";
-import { LocationContext } from "@/core/context";
 import { SWIGGY_SEARCH_IMG_URL } from "@/core/utils/common";
 import { useSearchParams, useRouter } from "next/navigation";
 import SearchResults from "@/components/SearchResults";
+import { useSelector } from "react-redux";
+import { IState } from "@/shared/model/state.mode";
 
 function Search() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { locationInfo } = useContext(LocationContext);
+  const locationState = useSelector((state: IState) => state.location);
   const searchTextRef = useRef<HTMLInputElement>(null);
   const [suggestions, setSuggestions] = useState<Array<any> | null>(null);
   const [searchResultData, setSearchResultData] = useState<Array<any> | null>(
@@ -24,9 +25,9 @@ function Search() {
     useState<Array<any> | null>(null);
 
   const getSuggestions = debounce((searchText: string) => {
-    if (searchText !== "" && locationInfo) {
-      const lat = locationInfo.geometry.location.lat.toString();
-      const lng = locationInfo.geometry.location.lng.toString();
+    if (searchText !== "" && locationState) {
+      const lat = locationState.geometry.location.lat.toString();
+      const lng = locationState.geometry.location.lng.toString();
       swiggyServices.getSuggestions(searchText, lat, lng).then((res) => {
         if (
           res.data.statusMessage !== "Invalid query string" &&
@@ -43,9 +44,9 @@ function Search() {
   }, 500);
 
   const getSearchResults = (query: string) => {
-    if (locationInfo) {
-      const lat = locationInfo.geometry.location.lat.toString();
-      const lng = locationInfo.geometry.location.lng.toString();
+    if (locationState) {
+      const lat = locationState.geometry.location.lat.toString();
+      const lng = locationState.geometry.location.lng.toString();
       swiggyServices.getSearchResults(query, lat, lng).then((res) => {
         setSearchResultData(res.data.data.cards);
         setSearchResultDataTabs(res.data.data.cards[0].card.card.tab);
@@ -120,7 +121,7 @@ function Search() {
             {suggestions.map((suggestion) => {
               return (
                 <div
-                  key={Math.random()}
+                  key={`${suggestion.text}${suggestion.cloudinaryId}`}
                   role="button"
                   onClick={() => {
                     router.push(`/search?query=${suggestion.text}`);

@@ -22,7 +22,7 @@ function FaqsList({ faq }: any) {
           <p className="font-light text-base text-gray-500 flex flex-col space-y-1">
             {faq.description.split("\n").map((desc: string) => {
               return(
-                <span key={Math.random()}>{desc}</span>
+                <span key={desc}>{desc}</span>
               )
             })}
           </p>

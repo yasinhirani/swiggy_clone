@@ -1,26 +1,30 @@
 "use client";
 import MenuListCard from "@/components/MenuListCard";
-import { CartContext, CartTotalContext, LocationContext } from "@/core/context";
 import {
   SWIGGY_FSSAI_IMG_URL,
   SWIGGY_OFFER_GENERIC_LOGO_URL,
   SWIGGY_OFFER_LOGO_URL,
 } from "@/core/utils/common";
+import { addToCart } from "@/features/addToCart/addToCart";
+import { IState } from "@/shared/model/state.mode";
 import swiggyServices from "@/shared/service/swiggy.service";
-import cartTotal from "@/shared/utils/cartTotal";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function Restaurant() {
-  const { locationInfo } = useContext(LocationContext);
-  const { CartData, SetCartData } = useContext(CartContext);
-  const { CartTotal, setCartTotal } = useContext(CartTotalContext);
   const searchParams = useSearchParams();
   const restaurantId = searchParams?.get("restaurantId");
   const router = useRouter();
+  const dispatch = useDispatch();
+  const cartRestaurantState = useSelector(
+    (state: IState) => state.cart.RestaurantDetails
+  );
+  const cartItemsState = useSelector((state: IState) => state.cart.Items);
+  const locationState = useSelector((state: IState) => state.location);
 
   const [restaurantData, setRestaurantData] = useState<Array<any>>([]);
   const [restaurantMenu, setRestaurantMenu] = useState<Array<any>>([]);
@@ -28,17 +32,16 @@ function Restaurant() {
   const [cartItem, setCartItem] = useState<ICartItems | null>(null);
   const [vegOnlySelected, setVegOnlySelected] = useState<boolean>(false);
   const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [menuViewCartFooterVisible, setMenuViewCartFooterVisible] =
-    useState<boolean>(CartData.Items.length > 0);
+    useState<boolean>(false);
 
   const getRestaurantMenu = () => {
-    if (restaurantId && locationInfo) {
+    if (restaurantId && locationState) {
       swiggyServices
         .getRestaurantMenu(
           restaurantId,
-          locationInfo.geometry.location.lat.toString(),
-          locationInfo.geometry.location.lng.toString()
+          locationState.geometry.location.lat.toString(),
+          locationState.geometry.location.lng.toString()
         )
         .then((res) => {
           setRestaurantData(res.data.data.cards);
@@ -60,10 +63,51 @@ function Restaurant() {
     }
   };
 
+  const handleAddToCart = (
+    itemId: string,
+    isVeg: boolean,
+    itemName: string,
+    price: number,
+    isAfreshStart: boolean
+  ) => {
+    const RestaurantDetail: ICartRestaurantDetails = {
+      RestaurantId: restaurantId!,
+      RestaurantImage: restaurantData[0].card.card.info.cloudinaryImageId,
+      RestaurantLocation: restaurantData[0].card.card.info.areaName,
+      RestaurantName: restaurantData[0].card.card.info.name,
+    };
+    const itemToAdd: ICartItems = {
+      ItemId: itemId,
+      IsVeg: isVeg,
+      ItemName: itemName,
+      Price: price,
+      Quantity: 1,
+      Total: price,
+    };
+    setCartItem(itemToAdd);
+    if (
+      cartRestaurantState !== null &&
+      cartRestaurantState?.RestaurantId !== restaurantId &&
+      !isAfreshStart
+    ) {
+      setInfoModalVisible(true);
+      return;
+    }
+    dispatch(
+      addToCart({
+        updateDetails: {
+          RestaurantDetail,
+          Item: itemToAdd,
+        },
+        isAfreshStart,
+      })
+    );
+  };
+
   const resetCartForNewOrder = () => {
-    SetCartData({ Items: [], RestaurantDetails: null });
     if (cartItem) {
-      addToCart(
+      console.log("run");
+      handleAddToCart(
         cartItem.ItemId,
         cartItem.IsVeg,
         cartItem.ItemName,
@@ -74,88 +118,23 @@ function Restaurant() {
     setInfoModalVisible(false);
   };
 
-  const addToCart = (
-    itemId: string,
-    isVeg: boolean,
-    itemName: string,
-    price: number,
-    isAfreshStart: boolean
-  ) => {
-    let copyCart = [...CartData.Items];
-    let itemToAdd: ICartItems = {
-      ItemId: itemId,
-      IsVeg: isVeg,
-      ItemName: itemName,
-      Price: price,
-      Quantity: 1,
-      Total: price,
-    };
-    setCartItem(itemToAdd);
-    // Start Add initial Product and restaurant details to cart
-    if (copyCart.length === 0 || isAfreshStart) {
-      const restaurantDetails: ICartRestaurantDetails = {
-        RestaurantId: restaurantId || "",
-        RestaurantImage: restaurantData[0].card.card.info.cloudinaryImageId,
-        RestaurantLocation: restaurantData[0].card.card.info.areaName,
-        RestaurantName: restaurantData[0].card.card.info.name,
-      };
-      copyCart = [];
-      copyCart.push(itemToAdd);
-      SetCartData({
-        RestaurantDetails: restaurantDetails,
-        Items: copyCart,
-      });
-      return;
-    }
-    // End Add initial Product and restaurant details to cart
-    // Start check if restaurant is same or different
-    if (CartData.RestaurantDetails?.RestaurantId !== restaurantId) {
-      setInfoModalVisible(true);
-      return;
-    }
-    // End check if restaurant is same or different
-    // Start add/update to cart if same restaurant
-    const itemIndex = copyCart.findIndex((item) => item.ItemId === itemId);
-    if (itemIndex === -1) {
-      copyCart.push(itemToAdd);
-      SetCartData({
-        Items: copyCart,
-        RestaurantDetails: CartData.RestaurantDetails,
-      });
-    } else {
-      copyCart[itemIndex].Quantity = copyCart[itemIndex].Quantity + 1;
-      copyCart[itemIndex].Total =
-        copyCart[itemIndex].Quantity * copyCart[itemIndex].Price;
-      SetCartData({
-        Items: copyCart,
-        RestaurantDetails: CartData.RestaurantDetails,
-      });
-    }
-    // End add/update to cart if same restaurant
-  };
-
   useEffect(() => {
     getRestaurantMenu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [restaurantId, locationInfo]);
+  }, [restaurantId, locationState.place_id]);
 
   useEffect(() => {
-    if (initialLoad) {
-      setInitialLoad(false);
-      return;
-    }
-    localStorage.setItem("cartData", JSON.stringify(CartData));
-    setCartTotal(cartTotal(CartData));
-    setMenuViewCartFooterVisible(CartData.Items.length > 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [CartData]);
+    setMenuViewCartFooterVisible(cartItemsState.length > 0);
+  }, [cartItemsState]);
+  
+
   return (
     <div className="mt-20 flex-grow flex flex-col relative">
       {restaurantData.length > 0 && (
         <div className="w-full max-w-[50rem] mx-auto flex-grow px-6 py-10 mb-16 lg:mb-0">
           <p className="font-normal text-xs text-gray-500">
             <Link href="/">Home</Link>/{" "}
-            {locationInfo?.address_components[0].long_name} /{" "}
+            {locationState?.address_components[0].long_name} /{" "}
             {restaurantData[0].card.card.info.name}
           </p>
           {/* Start Restaurant details */}
@@ -302,10 +281,10 @@ function Restaurant() {
               .map((menu) => {
                 return (
                   <MenuListCard
-                    key={Math.random()}
+                    key={menu.card.card.title}
                     menu={menu.card.card}
                     isVegOnlySelected={vegOnlySelected}
-                    addToCart={addToCart}
+                    addToCart={handleAddToCart}
                   />
                 );
               })}
@@ -391,8 +370,8 @@ function Restaurant() {
         onClick={() => router.push("/checkout")}
       >
         <p className="font-bold text-sm text-white">
-          {CartData.Items.length} {CartData.Items.length > 1 ? "Items" : "Item"}{" "}
-          | ₹{CartTotal}
+          {cartItemsState.length} {cartItemsState.length > 1 ? "Items" : "Item"}{" "}
+          | ₹{cartItemsState.reduce((acc: number, item: ICartItems) => acc + item.Total, 0)}
         </p>
         <p className="font-bold text-base text-white">VIEW CART</p>
       </div>

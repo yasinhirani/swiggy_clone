@@ -1,25 +1,27 @@
 "use client";
 import RestaurantCard from "@/components/RestaurantCard";
-import { LocationContext } from "@/core/context";
+import { IState } from "@/shared/model/state.mode";
 import swiggyServices from "@/shared/service/swiggy.service";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function Collections() {
-  const { locationInfo } = useContext(LocationContext);
   const searchParams = useSearchParams();
   const collectionId = searchParams?.get("collectionId");
+
+  const locationState = useSelector((state: IState) => state.location);
 
   const [collectionData, setCollectionData] = useState<any>([]);
   const [restaurantsList, setRestaurantsList] = useState<any>([]);
 
   useEffect(() => {
-    if (collectionId && locationInfo) {
+    if (collectionId && locationState) {
       swiggyServices
         .getCollections(
           collectionId,
-          locationInfo.geometry.location.lat.toString(),
-          locationInfo.geometry.location.lng.toString()
+          locationState.geometry.location.lat.toString(),
+          locationState.geometry.location.lng.toString()
         )
         .then((res) => {
           if (res.data.data) {
@@ -30,7 +32,7 @@ function Collections() {
           }
         });
     }
-  }, [collectionId, locationInfo]);
+  }, [collectionId, locationState]);
   return (
     <div className="mt-20 flex-grow flex flex-col">
       {collectionData && restaurantsList.length > 0 && (
