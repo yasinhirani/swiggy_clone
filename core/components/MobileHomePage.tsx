@@ -1,20 +1,22 @@
 "use client";
 import AppDownload from "@/components/AppDownload";
 import RestaurantCard from "@/components/RestaurantCard";
-import TopRestaurantCard from "@/components/TopRestaurantCard";
-import { LocationContext } from "@/core/context";
 import { SWIGGY_CAROUSAL_MOBILE_IMG_URL } from "@/core/utils/common";
 import swiggyServices from "@/shared/service/swiggy.service";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useRef } from "react";
 import SkeletonHomepageLoading from "./SkeletonHomepageLoading";
+import { useSelector } from "react-redux";
+import { IState } from "@/shared/model/state.mode";
 
 function MobileHomePage() {
-  const { locationInfo } = useContext(LocationContext);
   const router = useRouter();
+
+  const locationState = useSelector((state: IState) => state.location);
+
   const bestOffersScrollRef = useRef<HTMLDivElement>(null);
   const [swiggyData, setSwiggyData] = useState<any>(null);
   const [restaurantList, setRestaurantList] = useState<Array<any>>([]);
@@ -22,11 +24,11 @@ function MobileHomePage() {
   const [appliedFiltersList, setAppliedFiltersList] = useState<any>({});
 
   const getSwiggyData = () => {
-    if (locationInfo) {
+    if (locationState) {
       swiggyServices
         .getHomePageData(
-          locationInfo.geometry.location.lat.toString(),
-          locationInfo.geometry.location.lng.toString()
+          locationState.geometry.location.lat.toString(),
+          locationState.geometry.location.lng.toString()
         )
         .then((res) => {
           setSwiggyData(res.data);
@@ -67,8 +69,8 @@ function MobileHomePage() {
         facets: copyAppliedFilterList,
         isFiltered: true,
       },
-      lat: locationInfo?.geometry.location.lat,
-      lng: locationInfo?.geometry.location.lng,
+      lat: locationState?.geometry.location.lat,
+      lng: locationState?.geometry.location.lng,
       page_type: "DESKTOP_WEB_LISTING",
     };
     swiggyServices.update(filterObj).then((res) => {
@@ -86,12 +88,12 @@ function MobileHomePage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (locationInfo) {
+    if (locationState) {
       setSwiggyData(null);
       getSwiggyData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationInfo]);
+  }, [locationState.place_id]);
   return (
     <>
       {swiggyData !== null ? (
@@ -123,7 +125,7 @@ function MobileHomePage() {
                     return (
                       <button
                         type="button"
-                        key={Math.random()}
+                        key={city.text}
                         className="border border-gray-300 rounded-xl px-5 py-3 text-gray-800 last-of-type:col-span-full"
                       >
                         {city.text}

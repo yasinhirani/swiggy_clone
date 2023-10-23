@@ -3,17 +3,14 @@ import Navbar from "@/core/components/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Mukta } from "next/font/google";
-import { useState, useMemo, useEffect } from "react";
-import { ILocationInfo } from "@/core/model/location.model";
-import {
-  CartContext,
-  CartTotalContext,
-  LoadingContext,
-  LocationContext,
-} from "@/core/context";
+import { useEffect } from "react";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import cartTotal from "@/shared/utils/cartTotal";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
+import { setCartFromLocalStorage } from "@/features/addToCart/addToCart";
+import { setCurrentLocation } from "@/features/location/location";
+import { setLoading } from "@/features/loading/loading";
 
 const inter = Mukta({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -31,62 +28,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [locationInfo, setLocationInfo] = useState<ILocationInfo | null>(null);
-  const [CartData, SetCartData] = useState<ICartData>({
-    Items: [],
-    RestaurantDetails: null,
-  });
-  const [loading, setLoading] = useState<boolean>(true);
-  const [CartTotal, setCartTotal] = useState<number>(0);
-
-  const locationInfoState = useMemo(
-    () => ({
-      locationInfo,
-      setLocationInfo,
-    }),
-    [locationInfo]
-  );
-
-  const cartDataState = useMemo(
-    () => ({
-      CartData,
-      SetCartData,
-    }),
-    [CartData]
-  );
-
-  const loadingState = useMemo(
-    () => ({
-      loading,
-      setLoading,
-    }),
-    [loading]
-  );
-
-  const cartTotalState = useMemo(
-    () => ({
-      CartTotal,
-      setCartTotal,
-    }),
-    [CartTotal]
-  );
-
   useEffect(() => {
-    setLoading(true);
+    if (localStorage.cartData) {
+      const cartData = JSON.parse(localStorage.getItem("cartData") as string);
+      store.dispatch(setCartFromLocalStorage(cartData));
+    }
     if (localStorage.userLocation) {
       const userLocation = JSON.parse(
         localStorage.getItem("userLocation") as string
       );
-      setLocationInfo(userLocation);
+      store.dispatch(setCurrentLocation(userLocation));
     }
-    if (localStorage.cartData) {
-      const localStorageCartData = JSON.parse(
-        localStorage.getItem("cartData") as string
-      );
-      SetCartData(localStorageCartData);
-      setCartTotal(cartTotal(localStorageCartData));
-    }
-    setLoading(false);
+    store.dispatch(setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <html lang="en">
@@ -98,21 +52,15 @@ export default function RootLayout({
         <meta name="description" content="Swiggy clone" />
       </head>
       <UserProvider>
-        <body className={inter.className}>
-          <LocationContext.Provider value={locationInfoState}>
-            <CartContext.Provider value={cartDataState}>
-              <CartTotalContext.Provider value={cartTotalState}>
-                <LoadingContext.Provider value={loadingState}>
-                  <div className="w-full h-full bg-white flex flex-col">
-                    {(locationInfo || loading) && <Navbar />}
-                    {children}
-                  </div>
-                </LoadingContext.Provider>
-              </CartTotalContext.Provider>
-            </CartContext.Provider>
-          </LocationContext.Provider>
-          <Toaster />
-        </body>
+        <Provider store={store}>
+          <body className={inter.className}>
+            <div className="w-full h-full bg-white flex flex-col">
+              <Navbar />
+              {children}
+            </div>
+            <Toaster />
+          </body>
+        </Provider>
       </UserProvider>
     </html>
   );

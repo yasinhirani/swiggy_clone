@@ -1,4 +1,3 @@
-import { LocationContext } from "@/core/context";
 import locationService from "@/core/service/location.service";
 import {
   SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL,
@@ -11,9 +10,11 @@ import Image from "next/image";
 import React, { useContext, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setCurrentLocation } from "@/features/location/location";
 
 function DesktopHomePageWithoutLocation() {
-  const { setLocationInfo } = useContext(LocationContext);
+  const dispatch = useDispatch();
   const { user, isLoading } = useUser();
   const popularCities = [
     "Ahmedabad",
@@ -42,7 +43,7 @@ function DesktopHomePageWithoutLocation() {
 
   const getLocationInfo = (placeId: string) => {
     locationService.getLocationInfo(placeId).then((res) => {
-      setLocationInfo(res.data.data[0]);
+      dispatch(setCurrentLocation(res.data.data[0]));
       localStorage.setItem("userLocation", JSON.stringify(res.data.data[0]));
       setSuggestions(null);
     });
@@ -160,7 +161,7 @@ function DesktopHomePageWithoutLocation() {
                 {popularCities.map((city, index) => {
                   return (
                     <span
-                      key={Math.random()}
+                      key={city}
                       className={`${
                         index % 2 === 0 ? "text-gray-500" : "text-gray-400"
                       } font-semibold`}

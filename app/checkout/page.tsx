@@ -1,66 +1,30 @@
 "use client";
-import { CartContext, CartTotalContext } from "@/core/context";
-import cartTotal from "@/shared/utils/cartTotal";
+import { resetCart, updateCart } from "@/features/addToCart/addToCart";
+import { IState } from "@/shared/model/state.mode";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 function Cart() {
-  const { CartData, SetCartData } = useContext(CartContext);
-  const { CartTotal, setCartTotal } = useContext(CartTotalContext);
   const { user, isLoading } = useUser();
   const router = useRouter();
-
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
-
-  const updateCart = (itemId: string, updateType: string) => {
-    const copyCart = [...CartData.Items];
-    const itemIndex = copyCart.findIndex((item) => item.ItemId === itemId);
-    if (itemIndex !== -1) {
-      if (updateType === "decrease") {
-        if (copyCart[itemIndex].Quantity === 1) {
-          copyCart.splice(itemIndex, 1);
-          SetCartData({
-            Items: copyCart,
-            RestaurantDetails: CartData.RestaurantDetails,
-          });
-        } else {
-          copyCart[itemIndex].Quantity -= 1;
-          copyCart[itemIndex].Total =
-            copyCart[itemIndex].Quantity * copyCart[itemIndex].Price;
-          SetCartData({
-            Items: copyCart,
-            RestaurantDetails: CartData.RestaurantDetails,
-          });
-        }
-      } else {
-        copyCart[itemIndex].Quantity += 1;
-        copyCart[itemIndex].Total =
-          copyCart[itemIndex].Quantity * copyCart[itemIndex].Price;
-        SetCartData({
-          Items: copyCart,
-          RestaurantDetails: CartData.RestaurantDetails,
-        });
-      }
-    }
-  };
+  const dispatch = useDispatch();
+  const cartState = useSelector((state: IState) => state.cart);
 
   const placeOrder = () => {
     axios
       .post("/api/placeOrder", {
         email: user?.email,
-        cartData: CartData,
+        cartData: cartState,
       })
       .then((res) => {
         if (res.data.success) {
-          SetCartData({
-            RestaurantDetails: null,
-            Items: [],
-          });
+          dispatch(resetCart());
           toast.success(res.data.message);
           router.push("/");
         } else {
@@ -69,18 +33,9 @@ function Cart() {
       });
   };
 
-  useEffect(() => {
-    if (initialLoad) {
-      setInitialLoad(false);
-      return;
-    }
-    localStorage.setItem("cartData", JSON.stringify(CartData));
-    setCartTotal(cartTotal(CartData));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [CartData]);
   return (
     <div className="mt-20 flex-grow bg-gray-100 flex flex-col">
-      {CartData.Items.length > 0 ? (
+      {cartState.Items.length > 0 ? (
         <div className="w-full max-w-[76rem] mx-auto p-5 flex-grow flex flex-col-reverse sm:flex-row sm:space-x-8 px-6 py-10 mb-16 lg:mb-0">
           {/* Start Left section */}
           <div className="w-full sm:flex-grow mt-6 sm:mt-0">
@@ -147,7 +102,7 @@ function Cart() {
             <div className="flex items-start space-x-4">
               <figure>
                 <Image
-                  src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_100,h_100,c_fill/${CartData.RestaurantDetails?.RestaurantImage}`}
+                  src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_100,h_100,c_fill/${cartState.RestaurantDetails?.RestaurantImage}`}
                   alt=""
                   width={60}
                   height={60}
@@ -155,10 +110,10 @@ function Cart() {
               </figure>
               <div>
                 <h4 className="font-medium text-lg text-gray-700">
-                  {CartData.RestaurantDetails?.RestaurantName}
+                  {cartState.RestaurantDetails?.RestaurantName}
                 </h4>
                 <h6 className="font-normal text-sm text-gray-600">
-                  {CartData.RestaurantDetails?.RestaurantLocation}
+                  {cartState.RestaurantDetails?.RestaurantLocation}
                 </h6>
                 <div className="w-12 h-[2px] bg-gray-700 mt-3" />
               </div>
@@ -166,7 +121,7 @@ function Cart() {
             {/* End Restaurant Info */}
             {/* Start Menu items */}
             <div className="mt-8 space-y-3">
-              {CartData.Items.map((item) => {
+              {cartState.Items.map((item: ICartItems) => {
                 return (
                   <div
                     key={item.ItemId}
@@ -196,7 +151,16 @@ function Cart() {
                       <div className="border border-gray-300 flex justify-between items-center space-x-2 px-2 w-16 mr-12">
                         <button
                           type="button"
-                          onClick={() => updateCart(item.ItemId, "decrease")}
+                          onClick={() =>
+                            dispatch(
+                              updateCart({
+                                updateType: "remove",
+                                updateDetails: {
+                                  ItemId: item.ItemId,
+                                },
+                              })
+                            )
+                          }
                           className="text-gray-400 text-lg"
                         >
                           -
@@ -204,7 +168,16 @@ function Cart() {
                         <span className="text-[#60b246]">{item.Quantity}</span>
                         <button
                           type="button"
-                          onClick={() => updateCart(item.ItemId, "increase")}
+                          onClick={() =>
+                            dispatch(
+                              updateCart({
+                                updateType: "add",
+                                updateDetails: {
+                                  ItemId: item.ItemId,
+                                },
+                              })
+                            )
+                          }
                           className="text-[#60b246] text-lg"
                         >
                           +
@@ -230,7 +203,11 @@ function Cart() {
                   Item Total
                 </span>
                 <span className="font-light text-sm text-gray-600">
-                  ₹{CartTotal}
+                  ₹
+                  {cartState.Items.reduce(
+                    (acc: number, item: ICartItems) => acc + item.Total,
+                    0
+                  )}
                 </span>
               </div>
               <div className="flex justify-between items-center mt-2">
@@ -252,7 +229,11 @@ function Cart() {
                   To Pay
                 </span>
                 <span className="font-semibold text-base text-gray-800">
-                  ₹{CartTotal}
+                  ₹
+                  {cartState.Items.reduce(
+                    (acc: number, item: ICartItems) => acc + item.Total,
+                    0
+                  )}
                 </span>
               </div>
             </div>
