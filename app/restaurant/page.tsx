@@ -102,6 +102,7 @@ function Restaurant() {
         isAfreshStart,
       })
     );
+    setMenuViewCartFooterVisible(true);
   };
 
   const resetCartForNewOrder = () => {
@@ -120,12 +121,9 @@ function Restaurant() {
 
   useEffect(() => {
     getRestaurantMenu();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [restaurantId, locationState.place_id]);
-
-  useEffect(() => {
     setMenuViewCartFooterVisible(cartItemsState.length > 0);
-  }, [cartItemsState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
 
   return (
