@@ -11,7 +11,6 @@ function Home() {
   const loadingState = useSelector((state: IState) => state.loading);
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log(loadingState.isLoading);
   }, [loadingState]);
   return (
     <>

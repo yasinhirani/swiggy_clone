@@ -18,7 +18,6 @@ function Support() {
   const getIssuesRelatedFaqs = (issueType: string) => {
     setFaqs([]);
     swiggyServices.getIssueRelatedFaqs(issueType).then((res) => {
-      console.log(res.data);
       setFaqs(res.data.data.issues.data);
     });
   };
