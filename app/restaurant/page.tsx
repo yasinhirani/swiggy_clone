@@ -107,7 +107,6 @@ function Restaurant() {
 
   const resetCartForNewOrder = () => {
     if (cartItem) {
-      console.log("run");
       handleAddToCart(
         cartItem.ItemId,
         cartItem.IsVeg,

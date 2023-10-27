@@ -58,10 +58,8 @@ const addToCartSlice = createSlice({
           }
         }
         if (copyState.length === 0) {
-          state = {
-            RestaurantDetails: null,
-            Items: [],
-          };
+          state.RestaurantDetails = null;
+          state.Items = [];
         }
         localStorage.setItem("cartData", JSON.stringify(state));
       }
