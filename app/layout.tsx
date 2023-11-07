@@ -1,12 +1,12 @@
 "use client";
-import Navbar from "@/core/components/Navbar";
+
 import "./globals.css";
-import type { Metadata } from "next";
 import { Mukta } from "next/font/google";
 import { useEffect } from "react";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
+import Navbar from "@/core/components/Navbar";
 import { store } from "@/store/store";
 import { setCartFromLocalStorage } from "@/features/addToCart/addToCart";
 import { setCurrentLocation } from "@/features/location/location";
@@ -14,7 +14,7 @@ import { setLoading } from "@/features/loading/loading";
 
 const inter = Mukta({
   weight: ["300", "400", "500", "600", "700", "800"],
-  subsets: ["latin"],
+  subsets: ["latin"]
 });
 
 // export const metadata: Metadata = {
@@ -24,7 +24,7 @@ const inter = Mukta({
 // };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

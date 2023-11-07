@@ -1,16 +1,17 @@
 "use client";
-import AppDownload from "@/components/AppDownload";
-import RestaurantCard from "@/components/RestaurantCard";
-import { SWIGGY_CAROUSAL_MOBILE_IMG_URL } from "@/core/utils/common";
-import swiggyServices from "@/shared/service/swiggy.service";
+
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import SkeletonHomepageLoading from "./SkeletonHomepageLoading";
 import { useSelector } from "react-redux";
+import swiggyServices from "@/shared/service/swiggy.service";
+import { SWIGGY_CAROUSAL_MOBILE_IMG_URL } from "@/core/utils/common";
+import RestaurantCard from "@/components/RestaurantCard";
+import AppDownload from "@/components/AppDownload";
 import { IState } from "@/shared/model/state.mode";
+import SkeletonHomepageLoading from "./SkeletonHomepageLoading";
 import SwiggyUnserviceable from "./SwiggyUnserviceable";
 
 function MobileHomePage() {
@@ -49,10 +50,14 @@ function MobileHomePage() {
 
   const applyFilters = (filterId: string, facetInfoId: string) => {
     let copyAppliedFilterList = appliedFiltersList;
-    if (copyAppliedFilterList.hasOwnProperty(filterId)) {
-      let newObj: any = {};
-      for (let key in copyAppliedFilterList) {
-        if (key !== filterId && copyAppliedFilterList.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(copyAppliedFilterList, filterId)) {
+      const newObj: any = {};
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in copyAppliedFilterList) {
+        if (
+          key !== filterId &&
+          Object.prototype.hasOwnProperty.call(copyAppliedFilterList, key)
+        ) {
           newObj[key] = copyAppliedFilterList[key];
         }
       }
@@ -65,11 +70,11 @@ function MobileHomePage() {
     const filterObj = {
       filters: {
         facets: copyAppliedFilterList,
-        isFiltered: true,
+        isFiltered: true
       },
       lat: locationState?.geometry.location.lat,
       lng: locationState?.geometry.location.lng,
-      page_type: "DESKTOP_WEB_LISTING",
+      page_type: "DESKTOP_WEB_LISTING"
     };
     swiggyServices.update(filterObj).then((res) => {
       const updatedFilterList =
@@ -170,8 +175,6 @@ function MobileHomePage() {
                                   }`
                                 );
                               }
-                            } else {
-                              return;
                             }
                           }}
                           key={data.id}
@@ -203,19 +206,25 @@ function MobileHomePage() {
                   filterList.map((list) => {
                     return (
                       <button
+                        type="button"
                         key={list.id}
                         onClick={() =>
                           applyFilters(list.id, list.facetInfo[0].id)
                         }
                         className={`font-light text-gray-500 text-base flex items-center space-x-2 border ${
-                          list.facetInfo[0].hasOwnProperty("selected") &&
-                          list.facetInfo[0].selected
+                          Object.prototype.hasOwnProperty.call(
+                            list.facetInfo[0],
+                            "selected"
+                          ) && list.facetInfo[0].selected
                             ? "bg-gray-200 border-gray-800"
                             : "border-gray-200"
                         } rounded-3xl px-3 py-1.5 whitespace-nowrap`}
                       >
                         <span>{list.facetInfo[0].label}</span>
-                        {list.facetInfo[0].hasOwnProperty("selected") &&
+                        {Object.prototype.hasOwnProperty.call(
+                          list.facetInfo[0],
+                          "selected"
+                        ) &&
                           list.facetInfo[0].selected && (
                             <span>
                               <XMarkIcon className="w-5 h-5" />

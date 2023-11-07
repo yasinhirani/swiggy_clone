@@ -8,6 +8,7 @@ function FaqsList({ faq }: any) {
       <div
         role="button"
         onClick={() => setIsFaqOpen(!isFaqOpen)}
+        onKeyDown={() => setIsFaqOpen(!isFaqOpen)}
         className="flex justify-between items-start space-x-4 group"
       >
         <p className="font-light text-lg text-gray-800 group-hover:text-orange-500">{`${faq.title}`}</p>
@@ -21,9 +22,7 @@ function FaqsList({ faq }: any) {
         {faq.options.length === 0 ? (
           <p className="font-light text-base text-gray-500 flex flex-col space-y-1">
             {faq.description.split("\n").map((desc: string) => {
-              return(
-                <span key={desc}>{desc}</span>
-              )
+              return <span key={desc}>{desc}</span>;
             })}
           </p>
         ) : (
@@ -33,6 +32,7 @@ function FaqsList({ faq }: any) {
                 href={faq.hyperLink}
                 target="_blank"
                 className="text-orange-500 font-bold text-sm"
+                rel="noreferrer"
               >
                 {faq.hyperLinkText}
               </a>
@@ -42,6 +42,7 @@ function FaqsList({ faq }: any) {
                 href={`mailto:${faq.options[0].emailId}`}
                 target="_blank"
                 className="text-orange-500 font-bold border border-orange-500 px-4 py-2"
+                rel="noreferrer"
               >
                 SEND AN EMAIL
               </a>

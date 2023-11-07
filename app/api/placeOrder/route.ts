@@ -9,23 +9,24 @@ export async function POST(request: NextRequest) {
     const user = users;
     const existingUser = await user.findOne({ email });
     if (!existingUser) {
+      // eslint-disable-next-line new-cap
       const userToAdd = new users({
         email,
         orders: [cartData],
-        userId: "abc123",
+        userId: "abc123"
       });
       await userToAdd.save();
     } else {
       await user.updateOne(
         { email },
         {
-          $push: { orders: cartData },
+          $push: { orders: cartData }
         }
       );
     }
     return NextResponse.json({
       message: "Order placed successfully.",
-      success: true,
+      success: true
     });
   } catch (err) {
     return NextResponse.json({ message: err, success: false });

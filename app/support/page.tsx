@@ -1,7 +1,8 @@
 "use client";
+
+import React, { useState, useEffect } from "react";
 import FaqsList from "@/components/FaqsList";
 import swiggyServices from "@/shared/service/swiggy.service";
-import React, { useState, useEffect } from "react";
 
 function Support() {
   const [supportIssues, setSupportIssues] = useState<Array<any>>([]);
@@ -45,6 +46,7 @@ function Support() {
                 return (
                   <li key={issue.type}>
                     <button
+                      type="button"
                       onClick={() => setIssueTypeSelected(issue.type)}
                       className={`px-6 md:px-0 md:pl-16 md:pr-6 py-6 ${
                         issueTypeSelected === issue.type

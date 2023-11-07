@@ -30,9 +30,9 @@ const SWIGGY_NO_ORDER_FOUND_IMG_URL =
 const SWIGGY_ONE_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_720,h_660/swiggy_one/my_account_super";
 
-enum searchResultType {
+enum SearchResultType {
   RESTAURANT = "RESTAURANT",
-  DISH = "DISH",
+  DISH = "DISH"
 }
 
 export {
@@ -52,5 +52,5 @@ export {
   SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL,
   SWIGGY_NO_ORDER_FOUND_IMG_URL,
   SWIGGY_ONE_IMG_URL,
-  searchResultType
+  SearchResultType
 };

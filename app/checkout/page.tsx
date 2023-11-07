@@ -1,7 +1,5 @@
 "use client";
-import CartEmpty from "@/components/CartEmpty";
-import { resetCart, updateCart } from "@/features/addToCart/addToCart";
-import { IState } from "@/shared/model/state.mode";
+
 import { useUser } from "@auth0/nextjs-auth0/client";
 import axios from "axios";
 import Image from "next/image";
@@ -10,6 +8,9 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { IState } from "@/shared/model/state.mode";
+import { resetCart, updateCart } from "@/features/addToCart/addToCart";
+import CartEmpty from "@/components/CartEmpty";
 
 function Cart() {
   const { user, isLoading } = useUser();
@@ -21,7 +22,7 @@ function Cart() {
     axios
       .post("/api/placeOrder", {
         email: user?.email,
-        cartData: cartState,
+        cartData: cartState
       })
       .then((res) => {
         if (res.data.success) {
@@ -154,8 +155,8 @@ function Cart() {
                             updateCart({
                               updateType: "remove",
                               updateDetails: {
-                                ItemId: item.ItemId,
-                              },
+                                ItemId: item.ItemId
+                              }
                             })
                           )
                         }
@@ -171,8 +172,8 @@ function Cart() {
                             updateCart({
                               updateType: "add",
                               updateDetails: {
-                                ItemId: item.ItemId,
-                              },
+                                ItemId: item.ItemId
+                              }
                             })
                           )
                         }
