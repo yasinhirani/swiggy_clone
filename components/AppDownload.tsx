@@ -1,6 +1,6 @@
-import { SWIGGY_APP_STORE_IMG_URL } from "@/core/utils/common";
 import Image from "next/image";
 import React from "react";
+import { SWIGGY_APP_STORE_IMG_URL } from "@/core/utils/common";
 
 function AppDownload({ swiggyData, swiggyPresent }: any) {
   const swiggyAppDownloadApiLocation: number = swiggyPresent ? 3 : 2;
@@ -22,6 +22,7 @@ function AppDownload({ swiggyData, swiggyPresent }: any) {
               ].card.card.androidAppLink
             }
             target="_blank"
+            rel="noreferrer"
           >
             <figure>
               <Image
@@ -43,6 +44,7 @@ function AppDownload({ swiggyData, swiggyPresent }: any) {
               ].card.card.iosAppLink
             }
             target="_blank"
+            rel="noreferrer"
           >
             <figure>
               <Image

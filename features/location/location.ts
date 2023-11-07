@@ -8,22 +8,22 @@ const initialState: ILocationInfo = {
   geometry: {
     location: {
       lat: 0,
-      lng: 0,
+      lng: 0
     },
     location_type: "",
     viewport: {
       northeast: {
         lat: 0,
-        lng: 0,
+        lng: 0
       },
       southwest: {
         lat: 0,
-        lng: 0,
-      },
-    },
+        lng: 0
+      }
+    }
   },
   types: [],
-  place_type: "",
+  place_type: ""
 };
 
 const locationSlice = createSlice({
@@ -39,8 +39,8 @@ const locationSlice = createSlice({
       copyState.types = action.payload.types;
       copyState.geometry = action.payload.geometry;
       state = copyState;
-    },
-  },
+    }
+  }
 });
 
 export const { setCurrentLocation } = locationSlice.actions;

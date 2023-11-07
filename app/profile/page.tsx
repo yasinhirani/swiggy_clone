@@ -1,10 +1,15 @@
 "use client";
-import OrderListing from "@/components/profile/OrderListing";
-import SwiggyOne from "@/components/profile/SwiggyOne";
+
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { ArrowLeftIcon, GiftIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftIcon,
+  GiftIcon,
+  ShoppingBagIcon
+} from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import Link from "next/link";
+import SwiggyOne from "@/components/profile/SwiggyOne";
+import OrderListing from "@/components/profile/OrderListing";
 
 export default withPageAuthRequired(function Profile() {
   const { user } = useUser();
@@ -16,14 +21,14 @@ export default withPageAuthRequired(function Profile() {
       key: "orders",
       label: "Orders",
       icon: <ShoppingBagIcon className="w-5 h-5" />,
-      component: <OrderListing />,
+      component: <OrderListing />
     },
     {
       key: "swiggy_one",
       label: "Swiggy One",
       icon: <GiftIcon className="w-5 h-5" />,
-      component: <SwiggyOne />,
-    },
+      component: <SwiggyOne />
+    }
   ];
   return (
     <div className="mt-20 flex-grow flex flex-col bg-[#37718e]">
@@ -40,6 +45,7 @@ export default withPageAuthRequired(function Profile() {
                 return (
                   <li key={option.key}>
                     <button
+                      type="button"
                       onClick={() => setOptionIndexSelected(index)}
                       className={`px-6 md:px-0 md:pl-10 md:pr-6 py-6 ${
                         optionIndexSelected === index

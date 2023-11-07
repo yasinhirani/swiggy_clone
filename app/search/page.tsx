@@ -1,13 +1,14 @@
 "use client";
+
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { debounce } from "lodash";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import swiggyServices from "@/shared/service/swiggy.service";
 import { SWIGGY_SEARCH_IMG_URL } from "@/core/utils/common";
-import { useSearchParams, useRouter } from "next/navigation";
 import SearchResults from "@/components/SearchResults";
-import { useSelector } from "react-redux";
 import { IState } from "@/shared/model/state.mode";
 
 function Search() {
@@ -77,12 +78,10 @@ function Search() {
         searchTextRef.current.value = query;
         getSearchResults(query);
       }
-    } else {
-      if (searchTextRef.current) {
-        searchTextRef.current.value = "";
-        setSearchResultData(null);
-        setSuggestions(null);
-      }
+    } else if (searchTextRef.current) {
+      searchTextRef.current.value = "";
+      setSearchResultData(null);
+      setSuggestions(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
@@ -124,6 +123,11 @@ function Search() {
                   key={`${suggestion.text}${suggestion.cloudinaryId}`}
                   role="button"
                   onClick={() => {
+                    router.push(`/search?query=${suggestion.text}`);
+                    setSearchResultData(null);
+                    setSuggestions(null);
+                  }}
+                  onKeyDown={() => {
                     router.push(`/search?query=${suggestion.text}`);
                     setSearchResultData(null);
                     setSuggestions(null);

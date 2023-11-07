@@ -1,9 +1,9 @@
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react'
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 function CartEmpty() {
-    const router = useRouter();
+  const router = useRouter();
   return (
     <div className="flex-grow flex justify-center items-center p-5 mb-16 lg:mb-0">
       <div className="flex flex-col items-center">
@@ -33,4 +33,4 @@ function CartEmpty() {
   );
 }
 
-export default CartEmpty
+export default CartEmpty;

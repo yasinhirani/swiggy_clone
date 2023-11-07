@@ -1,7 +1,7 @@
-import { SWIGGY_MENU_ITEM_IMG_URL } from "@/core/utils/common";
 import { StarIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import React from "react";
+import { SWIGGY_MENU_ITEM_IMG_URL } from "@/core/utils/common";
 
 function FoodItemCard({ foodData, addToCart }: any) {
   return (
@@ -55,7 +55,7 @@ function FoodItemCard({ foodData, addToCart }: any) {
             onClick={() =>
               addToCart(
                 foodData.id,
-                foodData.isVeg ? true : false,
+                !!foodData.isVeg,
                 foodData.name,
                 foodData.price / 100 || foodData.defaultPrice / 100,
                 false
