@@ -4,35 +4,64 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { IState } from "@/shared/model/state.mode";
-import { resetCart, updateCart } from "@/features/addToCart/addToCart";
+import { updateCart } from "@/features/addToCart/addToCart";
 import CartEmpty from "@/components/CartEmpty";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { loadStripe } from "@stripe/stripe-js";
 
 function Cart() {
+  const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY!);
+
   const { user, isLoading } = useUser();
-  const router = useRouter();
   const dispatch = useDispatch();
   const cartState = useSelector((state: IState) => state.cart);
+  const locationState = useSelector(
+    (state: IState) => state.location.geometry.location
+  );
 
-  const placeOrder = () => {
-    axios
-      .post("/api/placeOrder", {
+  const placeOrder = async () => {
+    // axios
+    //   .post("/api/placeOrder", {
+    //     email: user?.email,
+    //     cartData: cartState
+    //   })
+    //   .then((res) => {
+    //     if (res.data.success) {
+    //       dispatch(resetCart());
+    //       toast.success(res.data.message);
+    //       router.push("/");
+    //     } else {
+    //       toast.error("Something went wrong while placing the order.");
+    //     }
+    //   });
+
+    const stripe = await stripePromise;
+
+    const checkoutSession = await axios
+      .post("/api/create-checkout-session", {
         email: user?.email,
-        cartData: cartState
-      })
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(resetCart());
-          toast.success(res.data.message);
-          router.push("/");
-        } else {
-          toast.error("Something went wrong while placing the order.");
+        cartData: cartState,
+        userLocation: {
+          lat: locationState.lat,
+          lng: locationState.lng
         }
-      });
+      })
+      .then((res) => res.data);
+
+    if (checkoutSession.success && user?.email) {
+      const result = await stripe
+        ?.redirectToCheckout({
+          sessionId: checkoutSession.id
+        })
+        .then((res) => res);
+      // if (result?.error) {
+      //   toast.error(result.error.message!);
+      // }
+      console.log(result);
+    }
   };
 
   if (cartState.Items.length === 0) {

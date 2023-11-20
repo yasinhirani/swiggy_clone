@@ -86,7 +86,11 @@ function Restaurant() {
       RestaurantId: restaurantId!,
       RestaurantImage: restaurantData.cloudinaryImageId,
       RestaurantLocation: restaurantData.areaName,
-      RestaurantName: restaurantData.name
+      RestaurantName: restaurantData.name,
+      RestaurantGeometry: {
+        lat: restaurantData.latLong.split(",")[0],
+        lng: restaurantData.latLong.split(",")[1]
+      }
     };
     const itemToAdd: ICartItems = {
       ItemId: itemId,

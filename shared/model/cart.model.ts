@@ -8,6 +8,10 @@ interface ICartRestaurantDetails {
   RestaurantImage: string;
   RestaurantName: string;
   RestaurantLocation: string;
+  RestaurantGeometry: {
+    lat: number;
+    lng: number;
+  };
 }
 interface ICartItems {
   ItemId: string;
@@ -16,4 +20,12 @@ interface ICartItems {
   Quantity: number;
   Price: number;
   Total: number;
+}
+interface IOrders {
+  orderId: string;
+  orderDetails: ICartData;
+  userLocation: {
+    lat: number;
+    lng: number;
+  };
 }

@@ -24,6 +24,9 @@ Swiggy Clone is a personal project aimed at replicating the popular food deliver
 - Tailwind CSS
 - Redux Toolkit
 - Axios
+- Stripe Payment Gateway
+- Stripe Webhooks
+- Mapbox
 
 ## [Project Setup](#project-setup)
 
