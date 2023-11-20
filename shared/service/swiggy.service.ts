@@ -52,7 +52,7 @@ const changeSearchResults = (
 };
 
 const getOrderDetail = (values: { email: string; orderId: string }) => {
-  const orderDetailApi = `http://localhost:3000/api/getOrderDetail`;
+  const orderDetailApi = `/api/getOrderDetail`;
   return axios.post(orderDetailApi, values);
 };
 
