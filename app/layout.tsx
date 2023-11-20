@@ -50,6 +50,10 @@ export default function RootLayout({
           restaurants near you`}
         </title>
         <meta name="description" content="Swiggy clone" />
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
+          rel="stylesheet"
+        />
       </head>
       <UserProvider>
         <Provider store={store}>

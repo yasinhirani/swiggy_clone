@@ -51,6 +51,11 @@ const changeSearchResults = (
   return axios.get(searchResultsApi);
 };
 
+const getOrderDetail = (values: { email: string; orderId: string }) => {
+  const orderDetailApi = `http://localhost:3000/api/getOrderDetail`;
+  return axios.post(orderDetailApi, values);
+};
+
 const swiggyServices = {
   getHomePageData,
   getCollections,
@@ -60,7 +65,8 @@ const swiggyServices = {
   update,
   getSuggestions,
   getSearchResults,
-  changeSearchResults
+  changeSearchResults,
+  getOrderDetail
 };
 
 export default swiggyServices;
