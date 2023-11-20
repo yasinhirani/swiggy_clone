@@ -1,19 +1,20 @@
 "use client";
-import MenuListCard from "@/components/MenuListCard";
-import {
-  SWIGGY_FSSAI_IMG_URL,
-  SWIGGY_OFFER_GENERIC_LOGO_URL,
-  SWIGGY_OFFER_LOGO_URL,
-} from "@/core/utils/common";
-import { addToCart } from "@/features/addToCart/addToCart";
-import { IState } from "@/shared/model/state.mode";
-import swiggyServices from "@/shared/service/swiggy.service";
+
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import swiggyServices from "@/shared/service/swiggy.service";
+import { IState } from "@/shared/model/state.mode";
+import { addToCart } from "@/features/addToCart/addToCart";
+import {
+  SWIGGY_FSSAI_IMG_URL,
+  SWIGGY_OFFER_GENERIC_LOGO_URL,
+  SWIGGY_OFFER_LOGO_URL
+} from "@/core/utils/common";
+import MenuListCard from "@/components/MenuListCard";
 
 function Restaurant() {
   const searchParams = useSearchParams();
@@ -26,8 +27,9 @@ function Restaurant() {
   const cartItemsState = useSelector((state: IState) => state.cart.Items);
   const locationState = useSelector((state: IState) => state.location);
 
-  const [restaurantData, setRestaurantData] = useState<Array<any>>([]);
+  const [restaurantData, setRestaurantData] = useState<any>(null);
   const [restaurantMenu, setRestaurantMenu] = useState<Array<any>>([]);
+  const [offers, setOffers] = useState<Array<any>>([]);
   const [menuList, setMenuList] = useState<Array<any>>([]);
   const [cartItem, setCartItem] = useState<ICartItems | null>(null);
   const [vegOnlySelected, setVegOnlySelected] = useState<boolean>(false);
@@ -44,16 +46,26 @@ function Restaurant() {
           locationState.geometry.location.lng.toString()
         )
         .then((res) => {
-          setRestaurantData(res.data.data.cards);
+          setRestaurantData(res.data.data.cards[0].card.card.info);
+          setOffers(
+            res.data.data.cards[1].card.card.gridElements.infoWithStyle.offers
+          );
           let menu = [];
-          if (res.data.data.cards[2]?.card?.card?.hasOwnProperty("tabs")) {
-            menu =
-              res.data.data.cards[3].groupedCard.cardGroupMap.REGULAR.cards;
-          } else {
+          if (
+            Object.prototype.hasOwnProperty.call(
+              res.data.data.cards[2],
+              "groupedCard"
+            )
+          ) {
             menu =
               res.data.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards;
+          } else {
+            menu =
+              res.data.data.cards[3].groupedCard.cardGroupMap.REGULAR.cards;
           }
-          if (menu[1].card.card.hasOwnProperty("carousel")) {
+          if (
+            Object.prototype.hasOwnProperty.call(menu[1].card.card, "carousel")
+          ) {
             setMenuList(menu.slice(2, menu.length - 2));
           } else {
             setMenuList(menu.slice(1, menu.length - 2));
@@ -72,9 +84,13 @@ function Restaurant() {
   ) => {
     const RestaurantDetail: ICartRestaurantDetails = {
       RestaurantId: restaurantId!,
-      RestaurantImage: restaurantData[0].card.card.info.cloudinaryImageId,
-      RestaurantLocation: restaurantData[0].card.card.info.areaName,
-      RestaurantName: restaurantData[0].card.card.info.name,
+      RestaurantImage: restaurantData.cloudinaryImageId,
+      RestaurantLocation: restaurantData.areaName,
+      RestaurantName: restaurantData.name,
+      RestaurantGeometry: {
+        lat: restaurantData.latLong.split(",")[0],
+        lng: restaurantData.latLong.split(",")[1]
+      }
     };
     const itemToAdd: ICartItems = {
       ItemId: itemId,
@@ -82,7 +98,7 @@ function Restaurant() {
       ItemName: itemName,
       Price: price,
       Quantity: 1,
-      Total: price,
+      Total: price
     };
     setCartItem(itemToAdd);
     if (
@@ -97,9 +113,9 @@ function Restaurant() {
       addToCart({
         updateDetails: {
           RestaurantDetail,
-          Item: itemToAdd,
+          Item: itemToAdd
         },
-        isAfreshStart,
+        isAfreshStart
       })
     );
     setMenuViewCartFooterVisible(true);
@@ -107,7 +123,6 @@ function Restaurant() {
 
   const resetCartForNewOrder = () => {
     if (cartItem) {
-      console.log("run");
       handleAddToCart(
         cartItem.ItemId,
         cartItem.IsVeg,
@@ -122,32 +137,31 @@ function Restaurant() {
   useEffect(() => {
     getRestaurantMenu();
     setMenuViewCartFooterVisible(cartItemsState.length > 0);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
 
   return (
     <div className="mt-20 flex-grow flex flex-col relative">
-      {restaurantData.length > 0 && (
+      {restaurantData && (
         <div className="w-full max-w-[50rem] mx-auto flex-grow px-6 py-10 mb-16 lg:mb-0">
           <p className="font-normal text-xs text-gray-500">
             <Link href="/">Home</Link>/{" "}
             {locationState?.address_components[0].long_name} /{" "}
-            {restaurantData[0].card.card.info.name}
+            {restaurantData.name}
           </p>
           {/* Start Restaurant details */}
           <div className="mt-10 flex justify-between items-center space-x-5">
             <div>
               <h2 className="font-bold text-2xl mb-1 text-gray-800">
-                {restaurantData[0].card.card.info.name}
+                {restaurantData.name}
               </h2>
               <p className="font-normal text-sm text-gray-500">
-                {restaurantData[0].card.card.info.cuisines.join(", ")}
+                {restaurantData.cuisines.join(", ")}
               </p>
               <p className="font-normal text-sm text-gray-500">
-                {restaurantData[0].card.card.info.areaName}
+                {restaurantData.areaName}
                 {", "}
-                {restaurantData[0].card.card.info.sla.lastMileTravelString}
+                {restaurantData.sla.lastMileTravelString}
               </p>
             </div>
             <div className="border border-gray-200 rounded-md p-2 flex flex-col items-center">
@@ -161,19 +175,19 @@ function Restaurant() {
                   />
                 </figure>
                 <p className="font-bold text-sm text-green-600">
-                  {restaurantData[0].card.card.info.avgRatingString}
+                  {restaurantData.avgRatingString}
                 </p>
               </div>
               <div className="w-full h-0.5 bg-gray-200 my-2" />
               <p className="font-bold text-xs text-gray-400">
-                {restaurantData[0].card.card.info.totalRatingsString}
+                {restaurantData.totalRatingsString}
               </p>
             </div>
           </div>
           {/* End Restaurant details */}
           {/* Start Distance text */}
           <p className="font-normal text-sm text-gray-500 mt-4">
-            {restaurantData[0].card.card.info.feeDetails.message}
+            {restaurantData.feeDetails.message}
           </p>
           {/* End Distance text */}
           {/* Start Divider */}
@@ -191,7 +205,7 @@ function Restaurant() {
                 />
               </figure>
               <p className="font-extrabold text-lg text-gray-800">
-                {restaurantData[0].card.card.info.sla.slaString}
+                {restaurantData.sla.slaString}
               </p>
             </div>
             <div className="flex items-center space-x-2">
@@ -204,47 +218,45 @@ function Restaurant() {
                 />
               </figure>
               <p className="font-extrabold text-lg text-gray-800">
-                {restaurantData[0].card.card.info.costForTwoMessage}
+                {restaurantData.costForTwoMessage}
               </p>
             </div>
           </div>
           {/* End time and currency */}
           {/* Start Offers */}
           <div className="mt-5 flex items-center space-x-4 overflow-hidden overflow-x-auto scrollbar-none">
-            {restaurantData[1].card.card.gridElements.infoWithStyle.offers.map(
-              (offer: any) => {
-                return (
-                  <div
-                    key={offer.info.offerIds[0]}
-                    className="border border-gray-200 rounded-md pl-2 pr-8 py-2 flex flex-col items-start"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <figure>
-                        <Image
-                          src={
-                            offer.info.offerLogo === "offers/generic"
-                              ? SWIGGY_OFFER_GENERIC_LOGO_URL
-                              : `${SWIGGY_OFFER_LOGO_URL}${offer.info.offerLogo}`
-                          }
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="w-5 min-w-[20px]"
-                        />
-                      </figure>
-                      <p className="font-bold text-gray-600 whitespace-nowrap">
-                        {offer.info.header}
-                      </p>
-                    </div>
-                    {offer.info.couponCode && offer.info.description && (
-                      <p className="font-semibold text-xs text-gray-500 whitespace-nowrap">
-                        {offer.info.couponCode} | {offer.info.description}
-                      </p>
-                    )}
+            {offers.map((offer: any) => {
+              return (
+                <div
+                  key={offer.info.offerIds[0]}
+                  className="border border-gray-200 rounded-md pl-2 pr-8 py-2 flex flex-col items-start"
+                >
+                  <div className="flex items-center space-x-2">
+                    <figure>
+                      <Image
+                        src={
+                          offer.info.offerLogo === "offers/generic"
+                            ? SWIGGY_OFFER_GENERIC_LOGO_URL
+                            : `${SWIGGY_OFFER_LOGO_URL}${offer.info.offerLogo}`
+                        }
+                        alt=""
+                        width={20}
+                        height={20}
+                        className="w-5 min-w-[20px]"
+                      />
+                    </figure>
+                    <p className="font-bold text-gray-600 whitespace-nowrap">
+                      {offer.info.header}
+                    </p>
                   </div>
-                );
-              }
-            )}
+                  {offer.info.couponCode && offer.info.description && (
+                    <p className="font-semibold text-xs text-gray-500 whitespace-nowrap">
+                      {offer.info.couponCode} | {offer.info.description}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
           </div>
           {/* End Offers */}
           {/* Start pure veg, veg and non-veg heading */}
@@ -256,6 +268,7 @@ function Restaurant() {
               <div
                 role="button"
                 onClick={() => setVegOnlySelected(!vegOnlySelected)}
+                onKeyDown={() => setVegOnlySelected(!vegOnlySelected)}
                 className={`w-9 ${
                   vegOnlySelected ? "bg-green-700" : "bg-gray-200"
                 } h-[18px] relative rounded`}
@@ -275,7 +288,12 @@ function Restaurant() {
           {/* Start Menu Listing */}
           <div className="space-y-3 bg-gray-200 pb-20">
             {menuList
-              .filter((menu) => menu.card.card.hasOwnProperty("itemCards"))
+              .filter((menu) =>
+                Object.prototype.hasOwnProperty.call(
+                  menu.card.card,
+                  "itemCards"
+                )
+              )
               .map((menu) => {
                 return (
                   <MenuListCard
@@ -366,10 +384,15 @@ function Restaurant() {
             : "-bottom-full"
         } left-1/2 right-1/2 transform -translate-x-1/2 transition-all bg-[#60b246] flex justify-between items-center`}
         onClick={() => router.push("/checkout")}
+        onKeyDown={() => router.push("/checkout")}
       >
         <p className="font-bold text-sm text-white">
           {cartItemsState.length} {cartItemsState.length > 1 ? "Items" : "Item"}{" "}
-          | ₹{cartItemsState.reduce((acc: number, item: ICartItems) => acc + item.Total, 0)}
+          | ₹
+          {cartItemsState.reduce(
+            (acc: number, item: ICartItems) => acc + item.Total,
+            0
+          )}
         </p>
         <p className="font-bold text-base text-white">VIEW CART</p>
       </div>

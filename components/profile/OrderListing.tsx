@@ -1,13 +1,16 @@
 "use client";
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Image from "next/image";
 import { SWIGGY_NO_ORDER_FOUND_IMG_URL } from "@/core/utils/common";
+import { useRouter } from "next/navigation";
 
 function OrderListing() {
+  const router = useRouter();
   const { user } = useUser();
-  const [orders, setOrders] = useState<Array<ICartData> | null>(null);
+  const [orders, setOrders] = useState<Array<IOrders> | null>(null);
   const getUserOrders = () => {
     axios.post("/api/getOrderListing", { email: user?.email }).then((res) => {
       if (res.data.success) {
@@ -33,13 +36,18 @@ function OrderListing() {
             {orders.map((order) => {
               return (
                 <div
-                  key={order.RestaurantDetails?.RestaurantId}
+                  key={order.orderDetails.RestaurantDetails?.RestaurantId}
                   className="bg-white shadow-md p-5 rounded-lg w-full"
+                  role="button"
+                  onClick={() => router.push(`/order?orderId=${order.orderId}`)}
+                  onKeyDown={() =>
+                    router.push(`/order?orderId=${order.orderId}`)
+                  }
                 >
                   <div className="flex items-start space-x-4">
                     <figure>
                       <Image
-                        src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_100,h_100,c_fill/${order.RestaurantDetails?.RestaurantImage}`}
+                        src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_100,h_100,c_fill/${order.orderDetails.RestaurantDetails?.RestaurantImage}`}
                         alt=""
                         width={60}
                         height={60}
@@ -47,15 +55,18 @@ function OrderListing() {
                     </figure>
                     <div>
                       <h4 className="font-medium text-lg text-gray-700">
-                        {order.RestaurantDetails?.RestaurantName}
+                        {order.orderDetails.RestaurantDetails?.RestaurantName}
                       </h4>
                       <h6 className="font-normal text-sm text-gray-600">
-                        {order.RestaurantDetails?.RestaurantLocation}
+                        {
+                          order.orderDetails.RestaurantDetails
+                            ?.RestaurantLocation
+                        }
                       </h6>
                     </div>
                   </div>
                   <div className="mt-4 space-y-3">
-                    {order.Items.map((item) => {
+                    {order.orderDetails.Items.map((item) => {
                       return (
                         <div
                           key={item.ItemId}

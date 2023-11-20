@@ -9,7 +9,7 @@ function MenuListCard({ menu, isVegOnlySelected, addToCart }: any) {
   useEffect(() => {
     if (isVegOnlySelected) {
       const filteredItems = [...menu.itemCards].filter((item) =>
-        item.card.info.hasOwnProperty("isVeg")
+        Object.prototype.hasOwnProperty.call(item.card.info, "isVeg")
       );
       setMenuItems(filteredItems);
     } else {
@@ -18,12 +18,13 @@ function MenuListCard({ menu, isVegOnlySelected, addToCart }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVegOnlySelected]);
   return (
-    <>
+    <div>
       {menu.itemCards && menuItems.length > 0 && (
         <div className="bg-white px-2 py-4">
           <div
             role="button"
             onClick={() => setIsMenuListOpen(!isMenuListOpen)}
+            onKeyDown={() => setIsMenuListOpen(!isMenuListOpen)}
             className="flex justify-between items-center"
           >
             <p className="font-extrabold text-lg text-gray-800">{`${menu.title} (${menuItems.length})`}</p>
@@ -41,7 +42,10 @@ function MenuListCard({ menu, isVegOnlySelected, addToCart }: any) {
             {menuItems.map((items: any, index: number) => {
               return (
                 <div key={items.card.info.id}>
-                  <FoodItemCard foodData={items.card.info} addToCart={addToCart} />
+                  <FoodItemCard
+                    foodData={items.card.info}
+                    addToCart={addToCart}
+                  />
                   {index < menu.itemCards.length - 1 && (
                     <hr className="mt-8 mb-4 border-gray-300" />
                   )}
@@ -51,7 +55,7 @@ function MenuListCard({ menu, isVegOnlySelected, addToCart }: any) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

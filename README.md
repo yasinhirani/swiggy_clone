@@ -1,34 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## [Swiggy Clone](#swiggy-clone)
 
-## Getting Started
+Swiggy Clone is a personal project aimed at replicating the popular food delivery platform, Swiggy. It provides a user-friendly web application that allows customers to browse and order from a variety of restaurants and enjoy the convenience of food delivery services.
 
-First, run the development server:
+[![swiggy](https://yasin-swiggy-clone.vercel.app/images/swiggy.svg)](https://yasin-swiggy-clone.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## [Features](#features)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Get a list of offers, foods, top restaurants and restaurants on homepage
+- Visit restaurants details page on clicking the restaurant card
+- Get a list of restaurants currently running offers on clicking offer banner
+- Search for any restaurant or dish
+- Filter restaurants
+- Add food item to cart with/without login
+- Place the order when logged in
+- Change location and get restaurants based on that location
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## [Tech Stack](#tech-stack)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Next JS (Full stack)
+- React
+- MongoDB
+- Auth0
+- Tailwind CSS
+- Redux Toolkit
+- Axios
+- Stripe Payment Gateway
+- Stripe Webhooks
+- Mapbox
 
-## Learn More
+## [Project Setup](#project-setup)
 
-To learn more about Next.js, take a look at the following resources:
+To setup and run the project locally:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repo: `https://github.com/yasinhirani/swiggy_clone`
+1. Navigate to project directory: `cd swiggy_clone`
+1. Install all the packages: `npm install`
+1. Run the project locally: `npm run dev`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## [Conclusion](#conclusion)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+In conclusion, my personal project, a Swiggy clone developed using Next.js and React, successfully replicates the core functionality of the popular food delivery platform, Swiggy. With a user-friendly interface and a responsive design, this project showcases my skills in web development and demonstrates the potential for creating efficient and engaging web applications in the ever-growing online food delivery industry.

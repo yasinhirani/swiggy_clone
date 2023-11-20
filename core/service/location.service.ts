@@ -9,7 +9,7 @@ const getLocation = (locationName: string) => {
 const getLocationInfo = (placeId: string) => {
   const locationInfoApi = `${CORS_BYPASS_URL}https://www.swiggy.com/dapi/misc/address-recommend?place_id=${placeId}`;
   return axios.get(locationInfoApi);
-}
+};
 
 const locationService = { getLocation, getLocationInfo };
 export default locationService;

@@ -1,10 +1,11 @@
 "use client";
-import RestaurantCard from "@/components/RestaurantCard";
-import { IState } from "@/shared/model/state.mode";
-import swiggyServices from "@/shared/service/swiggy.service";
+
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import RestaurantCard from "@/components/RestaurantCard";
+import { IState } from "@/shared/model/state.mode";
+import swiggyServices from "@/shared/service/swiggy.service";
 
 function Collections() {
   const searchParams = useSearchParams();
@@ -25,7 +26,7 @@ function Collections() {
         )
         .then((res) => {
           if (res.data.data) {
-            setCollectionData(res.data.data);
+            setCollectionData(res.data.data.cards[0].card.card);
             setRestaurantsList(
               res.data.data.cards.slice(2, res.data.data.cards.length)
             );
@@ -40,10 +41,10 @@ function Collections() {
           {/* Start Heading */}
           <div className="mb-6">
             <h2 className="font-semibold text-5xl mb-2 text-gray-700">
-              {collectionData.cards[0].card.card.title}
+              {collectionData.title}
             </h2>
             <p className="font-light text-lg tracking-wide">
-              {collectionData.cards[0].card.card.description}
+              {collectionData.description}
             </p>
           </div>
           {/* End Heading */}
@@ -54,7 +55,10 @@ function Collections() {
             {restaurantsList &&
               restaurantsList.map((data: any) => {
                 return (
-                  <RestaurantCard key={data.card.card.info.id} data={data.card.card} />
+                  <RestaurantCard
+                    key={data.card.card.info.id}
+                    data={data.card.card}
+                  />
                 );
               })}
           </div>

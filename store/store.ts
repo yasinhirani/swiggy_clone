@@ -6,9 +6,9 @@ import { loadingReducer } from "@/features/loading/loading";
 const rootReducer = {
   cart: addToCartReducer,
   location: locationReducer,
-  loading: loadingReducer,
+  loading: loadingReducer
 };
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: rootReducer
 });

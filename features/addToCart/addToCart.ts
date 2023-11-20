@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: ICartData = {
   RestaurantDetails: null,
-  Items: [],
+  Items: []
 };
 
 const addToCartSlice = createSlice({
@@ -58,10 +58,8 @@ const addToCartSlice = createSlice({
           }
         }
         if (copyState.length === 0) {
-          state = {
-            RestaurantDetails: null,
-            Items: [],
-          };
+          state.RestaurantDetails = null;
+          state.Items = [];
         }
         localStorage.setItem("cartData", JSON.stringify(state));
       }
@@ -76,8 +74,8 @@ const addToCartSlice = createSlice({
       copyState.RestaurantDetails = action.payload.RestaurantDetails;
       copyState.Items = [...action.payload.Items];
       state = copyState;
-    },
-  },
+    }
+  }
 });
 
 export const { addToCart, updateCart, resetCart, setCartFromLocalStorage } =

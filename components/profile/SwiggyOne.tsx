@@ -1,6 +1,6 @@
-import { SWIGGY_ONE_IMG_URL } from "@/core/utils/common";
 import Image from "next/image";
 import React from "react";
+import { SWIGGY_ONE_IMG_URL } from "@/core/utils/common";
 
 function SwiggyOne() {
   return (
@@ -19,6 +19,7 @@ function SwiggyOne() {
           <a
             href="https://play.google.com/store/apps/details?id=in.swiggy.android&referrer=utm_source%3Dswiggy%26utm_medium%3Dheader"
             target="_blank"
+            rel="noreferrer"
           >
             <figure>
               <Image
@@ -32,6 +33,7 @@ function SwiggyOne() {
           <a
             href="https://itunes.apple.com/in/app/id989540920?referrer=utm_source%3Dswiggy%26utm_medium%3Dhomepage"
             target="_blank"
+            rel="noreferrer"
           >
             <figure>
               <Image

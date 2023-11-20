@@ -1,3 +1,39 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:import/typescript",
+    "plugin:import/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
+    "next/core-web-vitals"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["import", "react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "react/react-in-jsx-scope": ["off"],
+    "react/jsx-uses-react": ["off"],
+    "react/jsx-props-no-spreading": ["warn"],
+    "prettier/prettier": 0,
+    "import/extensions": ["off"],
+    "import/no-unresolved": ["off"],
+    "import/prefer-default-export": ["off"],
+    "jsx-a11y/interactive-supports-focus": ["off"],
+    "jsx-a11y/control-has-associated-label": ["off"]
+  }
 }

@@ -1,8 +1,8 @@
-import { SWIGGY_MENU_ITEM_IMG_URL } from "@/core/utils/common";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { SWIGGY_MENU_ITEM_IMG_URL } from "@/core/utils/common";
 
 function SearchResultDishCard({ dishInfo, addToCart }: any) {
   const router = useRouter();
@@ -14,6 +14,11 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
       <div
         role="button"
         onClick={() =>
+          router.push(
+            `/restaurant?name=${dishInfo.restaurant.info.name}&restaurantId=${dishInfo.restaurant.info.feeDetails.restaurantId}`
+          )
+        }
+        onKeyDown={() =>
           router.push(
             `/restaurant?name=${dishInfo.restaurant.info.name}&restaurantId=${dishInfo.restaurant.info.feeDetails.restaurantId}`
           )
@@ -40,7 +45,8 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
           <figure>
             <Image
               src={
-                dishInfo.info.hasOwnProperty("isVeg") && dishInfo.info.isVeg
+                Object.prototype.hasOwnProperty.call(dishInfo.info, "isVeg") &&
+                dishInfo.info.isVeg
                   ? "/images/veg.svg"
                   : "/images/non_veg.svg"
               }
@@ -78,7 +84,7 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
           {dishInfo.info.imageId && (
             <Image
               src={`${SWIGGY_MENU_ITEM_IMG_URL}${dishInfo.info.imageId}`}
-              alt={""}
+              alt=""
               width={120}
               height={120}
               className="w-28 h-24 min-w-[112px] sm:w-32 sm:h-24 sm:min-w-[128px] rounded-lg object-cover"
@@ -90,7 +96,10 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
               onClick={() => {
                 addToCart(
                   dishInfo.info.id,
-                  dishInfo.info.hasOwnProperty("isVeg") ? true : false,
+                  !!Object.prototype.hasOwnProperty.call(
+                    dishInfo.info,
+                    "isVeg"
+                  ),
                   dishInfo.info.name,
                   dishInfo.info.price / 100,
                   false,
@@ -98,7 +107,7 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
                     RestaurantId: dishInfo.restaurant.info.id,
                     RestaurantName: dishInfo.restaurant.info.name,
                     RestaurantLocation: dishInfo.restaurant.info.areaName,
-                    RestaurantImage: dishInfo.restaurant.info.cloudinaryImageId,
+                    RestaurantImage: dishInfo.restaurant.info.cloudinaryImageId
                   }
                 );
               }}

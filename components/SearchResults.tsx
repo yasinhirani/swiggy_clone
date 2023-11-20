@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import SearchResultRestaurantCard from "./SearchResultRestaurantCard";
-import SearchResultDishCard from "./SearchResultDishCard";
-import { searchResultType } from "@/core/utils/common";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SearchResultType } from "@/core/utils/common";
 import { addToCart } from "@/features/addToCart/addToCart";
 import { IState } from "@/shared/model/state.mode";
+import SearchResultDishCard from "./SearchResultDishCard";
+import SearchResultRestaurantCard from "./SearchResultRestaurantCard";
 
 function SearchResults({ tabs, list }: any) {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ function SearchResults({ tabs, list }: any) {
       ItemName: itemName,
       Price: price,
       Quantity: 1,
-      Total: price,
+      Total: price
     };
 
     setCartItem(itemToAdd);
@@ -52,9 +52,9 @@ function SearchResults({ tabs, list }: any) {
       addToCart({
         updateDetails: {
           RestaurantDetail,
-          Item: itemToAdd,
+          Item: itemToAdd
         },
-        isAfreshStart,
+        isAfreshStart
       })
     );
   };
@@ -80,9 +80,11 @@ function SearchResults({ tabs, list }: any) {
           tabs.map((tab: any) => {
             return (
               <button
+                type="button"
                 key={tab.id}
                 className={`border ${
-                  tab.hasOwnProperty("selected") && tab.selected
+                  Object.prototype.hasOwnProperty.call(tab, "selected") &&
+                  tab.selected
                     ? "bg-[#1B1E24] border-[#1B1E24] text-white"
                     : "border-gray-300 bg-white"
                 } rounded-3xl px-3 py-2 cursor-default`}
@@ -93,28 +95,38 @@ function SearchResults({ tabs, list }: any) {
           })}
       </div>
       <div className="bg-gray-100 px-4 py-6">
-        {list.hasOwnProperty(searchResultType.RESTAURANT) && (
+        {Object.prototype.hasOwnProperty.call(
+          list,
+          SearchResultType.RESTAURANT
+        ) && (
           <SearchResultRestaurantCard
             maxWidth="max-w-max"
             restaurantInfo={list.RESTAURANT.cards[0].card.card.info}
           />
         )}
-        {list.hasOwnProperty(searchResultType.RESTAURANT) && (
+        {Object.prototype.hasOwnProperty.call(
+          list,
+          SearchResultType.RESTAURANT
+        ) && (
           <p className="mt-10 mb-5 font-bold text-lg">More results like this</p>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {list.hasOwnProperty(searchResultType.RESTAURANT) &&
+          {Object.prototype.hasOwnProperty.call(
+            list,
+            SearchResultType.RESTAURANT
+          ) &&
             list.RESTAURANT.cards[1].card.card.restaurants.map(
               (restaurant: any) => {
                 return (
                   <SearchResultRestaurantCard
                     key={restaurant.info.id}
+                    maxWidth=""
                     restaurantInfo={restaurant.info}
                   />
                 );
               }
             )}
-          {list.hasOwnProperty(searchResultType.DISH) &&
+          {Object.prototype.hasOwnProperty.call(list, SearchResultType.DISH) &&
             list.DISH.cards
               .slice(1, list.DISH.cards.length - 1)
               .map((card: any) => {

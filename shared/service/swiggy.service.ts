@@ -41,9 +41,19 @@ const getSearchResults = (searchText: string, lat: string, lng: string) => {
   return axios.get(searchResultsApi);
 };
 
-const changeSearchResults = (searchText: string, lat: string, lng: string, selectedTab: string) => {
+const changeSearchResults = (
+  searchText: string,
+  lat: string,
+  lng: string,
+  selectedTab: string
+) => {
   const searchResultsApi = `${CORS_BYPASS_URL}https://www.swiggy.com/dapi/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&submitAction=SUGGESTION&selectedPLTab=${selectedTab}`;
   return axios.get(searchResultsApi);
+};
+
+const getOrderDetail = (values: { email: string; orderId: string }) => {
+  const orderDetailApi = `http://localhost:3000/api/getOrderDetail`;
+  return axios.post(orderDetailApi, values);
 };
 
 const swiggyServices = {
@@ -55,7 +65,8 @@ const swiggyServices = {
   update,
   getSuggestions,
   getSearchResults,
-  changeSearchResults
+  changeSearchResults,
+  getOrderDetail
 };
 
 export default swiggyServices;

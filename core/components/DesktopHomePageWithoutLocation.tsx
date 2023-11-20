@@ -1,16 +1,16 @@
-import locationService from "@/core/service/location.service";
-import {
-  SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL,
-  SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL,
-  SWIGGY_HERO_NO_MINIMUM_ORDER_IMG_URL,
-} from "@/core/utils/common";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { debounce } from "lodash";
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import {
+  SWIGGY_HERO_LIGHTNING_FAST_DELIVERY_IMG_URL,
+  SWIGGY_HERO_LIVE_ORDER_TRACKING_IMG_URL,
+  SWIGGY_HERO_NO_MINIMUM_ORDER_IMG_URL
+} from "@/core/utils/common";
+import locationService from "@/core/service/location.service";
 import { setCurrentLocation } from "@/features/location/location";
 
 function DesktopHomePageWithoutLocation() {
@@ -26,7 +26,7 @@ function DesktopHomePageWithoutLocation() {
     "Kolkata",
     "Mumbai",
     "Pune",
-    "& more.",
+    "& more."
   ];
 
   const [suggestions, setSuggestions] = useState<Array<any> | null>(null);
@@ -240,6 +240,7 @@ function DesktopHomePageWithoutLocation() {
             <a
               href="https://play.google.com/store/apps/details?id=in.swiggy.android&referrer=utm_source%3Dswiggy%26utm_medium%3Dheader"
               target="_blank"
+              rel="noreferrer"
             >
               <figure>
                 <Image
@@ -253,6 +254,7 @@ function DesktopHomePageWithoutLocation() {
             <a
               href="https://itunes.apple.com/in/app/id989540920?referrer=utm_source%3Dswiggy%26utm_medium%3Dhomepage"
               target="_blank"
+              rel="noreferrer"
             >
               <figure>
                 <Image

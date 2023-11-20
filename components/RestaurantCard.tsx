@@ -1,7 +1,7 @@
-import { SWIGGY_RESTAURANT_LISTING_IMG_URL } from "@/core/utils/common";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { SWIGGY_RESTAURANT_LISTING_IMG_URL } from "@/core/utils/common";
 
 function RestaurantCard({ data }: any) {
   const router = useRouter();
@@ -9,6 +9,11 @@ function RestaurantCard({ data }: any) {
     <div
       role="button"
       onClick={() => {
+        router.push(
+          `/restaurant?name=${data.info.name}&restaurantId=${data.info.feeDetails.restaurantId}`
+        );
+      }}
+      onKeyDown={() => {
         router.push(
           `/restaurant?name=${data.info.name}&restaurantId=${data.info.feeDetails.restaurantId}`
         );

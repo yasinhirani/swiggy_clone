@@ -1,22 +1,23 @@
 "use client";
-import { useState, useContext } from "react";
+
+import { useState } from "react";
 import {
   ChevronDownIcon,
   LifebuoyIcon,
   UserIcon,
   GiftIcon,
-  MapPinIcon,
+  MapPinIcon
 } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
-import locationService from "../service/location.service";
 import { debounce } from "lodash";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentLocation } from "@/features/location/location";
 import { IState } from "@/shared/model/state.mode";
+import locationService from "../service/location.service";
 
 function Navbar() {
   const cartState = useSelector((state: IState) => state.cart.Items);
@@ -57,11 +58,10 @@ function Navbar() {
       getLocations(searchText.trim());
     } else {
       setLocationList(null);
-      return;
     }
   }, 500);
   return (
-    <>
+    <div>
       {locationState.place_id && (
         <>
           <nav className="w-full flex h-20 shadow-xl bg-white fixed top-0 px-6 z-10">
@@ -207,7 +207,7 @@ function Navbar() {
                           width="20"
                           fill="currentColor"
                         >
-                          <path d="M4.438 0l-2.598 5.11-1.84 26.124h34.909l-1.906-26.124-2.597-5.11z"></path>
+                          <path d="M4.438 0l-2.598 5.11-1.84 26.124h34.909l-1.906-26.124-2.597-5.11z" />
                         </svg>
                       </span>
                       <span>Cart</span>
@@ -221,6 +221,11 @@ function Navbar() {
             <div
               role="button"
               onClick={() => {
+                setLocationList(null);
+                setIsLocationModalOpen(false);
+                document.body.classList.remove("overflow-hidden");
+              }}
+              onKeyDown={() => {
                 setLocationList(null);
                 setIsLocationModalOpen(false);
                 document.body.classList.remove("overflow-hidden");
@@ -331,7 +336,7 @@ function Navbar() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 
