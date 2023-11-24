@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     payment_method_types: ["card"],
     customer_email: email,
     shipping_address_collection: {
-      allowed_countries: ["IN", "US", "CN"]
+      allowed_countries: ["IN", "US"]
     },
     line_items: updatedProductData,
     mode: "payment",
