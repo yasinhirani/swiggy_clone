@@ -7,14 +7,42 @@ import React, { useEffect, useState } from "react";
 import Map, { Layer, NavigationControl, Source, useMap } from "react-map-gl";
 import { useDispatch } from "react-redux";
 
-function MapImage() {
+function MapImageRed() {
   const { current: map } = useMap();
 
-  if (!map?.hasImage("map-pin")) {
+  if (!map?.hasImage("map-pin-red")) {
     map?.loadImage("/images/map_pin_red.png", (error, image) => {
       if (error) throw error;
-      if (!map.hasImage("map-pin") && image)
-        map.addImage("map-pin", image, { sdf: true });
+      if (!map.hasImage("map-pin-red") && image)
+        map.addImage("map-pin-red", image, { sdf: false });
+    });
+  }
+
+  return null;
+}
+
+function MapImageGreen() {
+  const { current: map } = useMap();
+
+  if (!map?.hasImage("map-pin-green")) {
+    map?.loadImage("/images/map_pin_green.png", (error, image) => {
+      if (error) throw error;
+      if (!map.hasImage("map-pin-green") && image)
+        map.addImage("map-pin-green", image, { sdf: false });
+    });
+  }
+
+  return null;
+}
+
+function DeliveryManImage() {
+  const { current: map } = useMap();
+
+  if (!map?.hasImage("delivery-man")) {
+    map?.loadImage("/images/delivery_man.png", (error, image) => {
+      if (error) throw error;
+      if (!map.hasImage("delivery-man") && image)
+        map.addImage("delivery-man", image, { sdf: false });
     });
   }
 
@@ -24,6 +52,7 @@ function MapImage() {
 function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
   const dispatch = useDispatch();
   const [directionCoords, setDirectionCoords] = useState<any>([]);
+  const [deliveryManCoord, setDeliveryManCoord] = useState<number>(0);
 
   const geojson: any = {
     type: "FeatureCollection",
@@ -64,6 +93,21 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
     ]
   };
 
+  const deliveryManPoint: any = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "feature",
+        geometry: {
+          type: "Point",
+          coordinates: isFromSuccess
+            ? directionCoords[deliveryManCoord]
+            : directionCoords[directionCoords.length - 1]
+        }
+      }
+    ]
+  };
+
   const lineStyle: any = {
     id: "lineStyle",
     type: "line",
@@ -74,7 +118,7 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
     paint: {
       "line-color": "#006EB3",
       "line-opacity": 0.6,
-      "line-width": 8
+      "line-width": 6
     }
   };
 
@@ -82,8 +126,8 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
     id: "start",
     type: "symbol",
     layout: {
-      "icon-image": "map-pin",
-      "icon-size": 0.4,
+      "icon-image": "map-pin-red",
+      "icon-size": 0.3,
       "icon-offset": [0, -20],
       "icon-allow-overlap": true
     }
@@ -93,8 +137,19 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
     id: "end",
     type: "symbol",
     layout: {
-      "icon-image": "map-pin",
-      "icon-size": 0.4,
+      "icon-image": "map-pin-green",
+      "icon-size": 0.3,
+      "icon-offset": [0, -20],
+      "icon-allow-overlap": true
+    }
+  };
+
+  const lineStyleDeliveryMan: any = {
+    id: "deliveryMan",
+    type: "symbol",
+    layout: {
+      "icon-image": "delivery-man",
+      "icon-size": 0.06,
       "icon-offset": [0, -20],
       "icon-allow-overlap": true
     }
@@ -111,6 +166,16 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
     const data = await response.json();
     setDirectionCoords(data.routes[0].geometry.coordinates);
   };
+
+  if (directionCoords.length > 0 && isFromSuccess) {
+    const deliveryManTimeOut = setTimeout(() => {
+      if (deliveryManCoord < directionCoords.length - 1) {
+        setDeliveryManCoord((prev: number) => prev + 1);
+      } else {
+        clearTimeout(deliveryManTimeOut);
+      }
+    }, 5000);
+  }
 
   useEffect(() => {
     if (restaurantCoords && userCoords) {
@@ -132,7 +197,7 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
           initialViewState={{
             longitude: restaurantCoords.lng ?? "",
             latitude: restaurantCoords.lat ?? "",
-            zoom: 14
+            zoom: 15
           }}
           style={{
             width: "100%",
@@ -147,11 +212,20 @@ function MapComponent({ restaurantCoords, userCoords, isFromSuccess }: any) {
           <Source id="geojsonStartPoint" type="geojson" data={startPoint}>
             <Layer {...lineStyleStartPoint} />
           </Source>
+          <Source
+            id="geojsonDeliveryMan"
+            type="geojson"
+            data={deliveryManPoint}
+          >
+            <Layer {...lineStyleDeliveryMan} />
+          </Source>
           <Source id="geojsonEndpoint" type="geojson" data={endpoint}>
             <Layer {...lineStyleEndpoint} />
           </Source>
           <NavigationControl />
-          <MapImage />
+          <MapImageRed />
+          <MapImageGreen />
+          <DeliveryManImage />
         </Map>
       )}
     </>
