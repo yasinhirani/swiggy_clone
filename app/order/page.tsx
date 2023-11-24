@@ -25,9 +25,9 @@ function Order() {
   } | null>(null);
 
   useEffect(() => {
-    if (orderId) {
+    if (orderId && user?.email) {
       swiggyServices
-        .getOrderDetail({ email: user?.email!, orderId })
+        .getOrderDetail({ email: user?.email, orderId })
         .then((res) => {
           setOrderData(res.data.orderDetails);
           setRestaurantCoords(
@@ -44,8 +44,8 @@ function Order() {
       {orderData && (
         <div className="w-full max-w-[76rem] mx-auto px-5 py-10 flex-grow flex flex-col">
           {/* Start Restaurant Details */}
-          <div className="flex items-start space-x-8">
-            <figure className="w-64 h-48 rounded-lg overflow-hidden">
+          <div className="flex flex-col sm:flex-row items-start sm:space-x-8 space-y-8 sm:space-y-0">
+            <figure className="w-full sm:w-64 h-64 sm:h-48 rounded-lg overflow-hidden">
               <Image
                 src={`${SWIGGY_RESTAURANT_LISTING_IMG_URL}${orderData?.orderDetails.RestaurantDetails?.RestaurantImage}`}
                 alt="order"
@@ -70,7 +70,7 @@ function Order() {
               return (
                 <div
                   key={item.ItemId}
-                  className="flex justify-between items-center space-x-3 w-96"
+                  className="flex justify-between items-center space-x-3 w-full sm:w-96"
                 >
                   <div className="flex items-center space-x-2">
                     <figure>
