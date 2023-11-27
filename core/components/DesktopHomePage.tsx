@@ -40,27 +40,29 @@ function DesktopHomePage() {
           locationState.geometry.location.lng.toString()
         )
         .then((res) => {
-          const data = {
-            bannerOffers:
-              res.data.data.cards[0].card.card.gridElements.infoWithStyle.info,
-            whatsOnYourMind:
-              res.data.data.cards[1].card.card.gridElements.infoWithStyle.info,
-            topRestaurants:
-              res.data.data.cards[2].card.card.gridElements.infoWithStyle
-                .restaurants,
-            restaurants:
-              res.data.data.cards[5].card.card.gridElements.infoWithStyle
-                .restaurants
-          };
+          if (res.data.data.cards[0].card.card.id !== "swiggy_not_present") {
+            const data = {
+              bannerOffers:
+                res.data.data.cards[0].card.card.gridElements.infoWithStyle.info,
+              whatsOnYourMind:
+                res.data.data.cards[1].card.card.gridElements.infoWithStyle.info,
+              topRestaurants:
+                res.data.data.cards[2].card.card.gridElements.infoWithStyle
+                  .restaurants,
+              restaurants:
+                res.data.data.cards[5].card.card.gridElements.infoWithStyle
+                  .restaurants
+            };
+            setSwiggyMappingData(data);
+            setRestaurantList(data.restaurants);
+            const updatedFilterList =
+              res.data.data.cards[4].card.card.facetList.filter(
+                (list: any) =>
+                  list.id !== "catalog_cuisines" && list.id !== "explore"
+              );
+            setFilterList(updatedFilterList);
+          }
           setSwiggyData(res.data);
-          setSwiggyMappingData(data);
-          setRestaurantList(data.restaurants);
-          const updatedFilterList =
-            res.data.data.cards[4].card.card.facetList.filter(
-              (list: any) =>
-                list.id !== "catalog_cuisines" && list.id !== "explore"
-            );
-          setFilterList(updatedFilterList);
         });
     }
   };
