@@ -35,11 +35,11 @@ function MobileHomePage() {
         .then((res) => {
           setSwiggyData(res.data);
           setRestaurantList(
-            res.data.data.cards[3].card.card.gridElements.infoWithStyle
+            res.data.data.cards[2].card.card.gridElements.infoWithStyle
               .restaurants
           );
           const updatedFilterList =
-            res.data.data.cards[2].card.card.facetList.filter(
+            res.data.data.cards[1].card.card.facetList.filter(
               (list: any) =>
                 list.id !== "catalog_cuisines" && list.id !== "explore"
             );
@@ -113,92 +113,96 @@ function MobileHomePage() {
         <div className="mb-16 lg:mb-0 flex-grow flex flex-col">
           <div className="w-full max-w-[92rem] mx-auto flex-grow px-6 py-7">
             {/* Start Best offers */}
-            <div>
-              <div className="flex justify-between items-center space-x-5">
-                <h3 className="font-extrabold text-2xl">Best offers for you</h3>
-                <div className="flex items-center space-x-5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (bestOffersScrollRef.current) {
-                        bestOffersScrollRef.current.scrollLeft -= 400;
+            {false && (
+              <div>
+                <div className="flex justify-between items-center space-x-5">
+                  <h3 className="font-extrabold text-2xl">
+                    Best offers for you
+                  </h3>
+                  <div className="flex items-center space-x-5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (bestOffersScrollRef.current) {
+                          bestOffersScrollRef.current.scrollLeft -= 400;
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
+                    >
+                      <ArrowLeftIcon className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (bestOffersScrollRef.current) {
+                          bestOffersScrollRef.current.scrollLeft += 400;
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
+                    >
+                      <ArrowRightIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+                <div
+                  ref={bestOffersScrollRef}
+                  className="mt-4 flex items-center space-x-5 overflow-hidden overflow-x-auto scrollbar-none"
+                >
+                  {swiggyData !== null &&
+                    swiggyData.data &&
+                    swiggyData.data.cards[0].card.card.gridElements.infoWithStyle.info.map(
+                      (data: any) => {
+                        return (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (data.action.link.includes("menu")) {
+                                router.push(
+                                  `/restaurant?name=&restaurantId=${data.entityId}`
+                                );
+                              } else if (
+                                data.action.link.includes("collection_id")
+                              ) {
+                                const url = new URL(data.action.link);
+                                const collectionId =
+                                  url.searchParams.get("collection_id");
+                                if (collectionId) {
+                                  router.push(
+                                    `/collections?collectionId=${collectionId}`
+                                  );
+                                } else {
+                                  const entityId = data.entityId.split("/");
+                                  router.push(
+                                    `/collections?collectionId=${
+                                      entityId[entityId.length - 1]
+                                    }`
+                                  );
+                                }
+                              }
+                            }}
+                            key={data.id}
+                          >
+                            <figure>
+                              <Image
+                                src={`${SWIGGY_CAROUSAL_MOBILE_IMG_URL}${data.imageId}`}
+                                alt=""
+                                width={400}
+                                height={220}
+                                className="w-[320px] min-w-[320px] h-[200px]"
+                              />
+                            </figure>
+                          </button>
+                        );
                       }
-                    }}
-                    className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
-                  >
-                    <ArrowLeftIcon className="w-5 h-5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (bestOffersScrollRef.current) {
-                        bestOffersScrollRef.current.scrollLeft += 400;
-                      }
-                    }}
-                    className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
-                  >
-                    <ArrowRightIcon className="w-5 h-5" />
-                  </button>
+                    )}
                 </div>
               </div>
-              <div
-                ref={bestOffersScrollRef}
-                className="mt-4 flex items-center space-x-5 overflow-hidden overflow-x-auto scrollbar-none"
-              >
-                {swiggyData !== null &&
-                  swiggyData.data &&
-                  swiggyData.data.cards[0].card.card.gridElements.infoWithStyle.info.map(
-                    (data: any) => {
-                      return (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (data.action.link.includes("menu")) {
-                              router.push(
-                                `/restaurant?name=&restaurantId=${data.entityId}`
-                              );
-                            } else if (
-                              data.action.link.includes("collection_id")
-                            ) {
-                              const url = new URL(data.action.link);
-                              const collectionId =
-                                url.searchParams.get("collection_id");
-                              if (collectionId) {
-                                router.push(
-                                  `/collections?collectionId=${collectionId}`
-                                );
-                              } else {
-                                const entityId = data.entityId.split("/");
-                                router.push(
-                                  `/collections?collectionId=${
-                                    entityId[entityId.length - 1]
-                                  }`
-                                );
-                              }
-                            }
-                          }}
-                          key={data.id}
-                        >
-                          <figure>
-                            <Image
-                              src={`${SWIGGY_CAROUSAL_MOBILE_IMG_URL}${data.imageId}`}
-                              alt=""
-                              width={400}
-                              height={220}
-                              className="w-[320px] min-w-[320px] h-[200px]"
-                            />
-                          </figure>
-                        </button>
-                      );
-                    }
-                  )}
-              </div>
-            </div>
+            )}
             {/* End Best offers */}
             {/* Start Restaurants with online food delivery */}
             <div className="mt-10 space-y-6">
               <h3 className="font-extrabold text-2xl">
-                {swiggyData?.data?.cards[1].card.card.title}
+                {swiggyData?.data?.cards[0].card.card.title}
               </h3>
               {/* Start Filter list */}
               <div className="flex items-center space-x-3 overflow-hidden overflow-x-auto scrollbar-none">

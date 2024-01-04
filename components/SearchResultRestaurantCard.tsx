@@ -14,16 +14,16 @@ function SearchResultRestaurantCard({ maxWidth, restaurantInfo }: IProps) {
     <div
       role="button"
       onClick={() => {
-        if (restaurantInfo.feeDetails.restaurantId) {
+        if (restaurantInfo.id) {
           router.push(
-            `/restaurant?name=${restaurantInfo.name}&restaurantId=${restaurantInfo.feeDetails.restaurantId}`
+            `/restaurant?name=${restaurantInfo.name}&restaurantId=${restaurantInfo.id}`
           );
         }
       }}
       onKeyDown={() => {
-        if (restaurantInfo.feeDetails.restaurantId) {
+        if (restaurantInfo.id) {
           router.push(
-            `/restaurant?name=${restaurantInfo.name}&restaurantId=${restaurantInfo.feeDetails.restaurantId}`
+            `/restaurant?name=${restaurantInfo.name}&restaurantId=${restaurantInfo.id}`
           );
         }
       }}

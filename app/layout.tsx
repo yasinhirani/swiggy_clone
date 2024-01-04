@@ -11,6 +11,7 @@ import { store } from "@/store/store";
 import { setCartFromLocalStorage } from "@/features/addToCart/addToCart";
 import { setCurrentLocation } from "@/features/location/location";
 import { setLoading } from "@/features/loading/loading";
+import Interceptor from "@/core/service/interceptor";
 
 const inter = Mukta({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -62,6 +63,7 @@ export default function RootLayout({
               <Navbar />
               {children}
             </div>
+            <Interceptor />
             <Toaster />
           </body>
         </Provider>

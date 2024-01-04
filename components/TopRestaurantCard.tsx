@@ -10,12 +10,12 @@ function TopRestaurantCard({ data }: any) {
       role="button"
       onClick={() => {
         router.push(
-          `/restaurant?name=${data.info.name}&restaurantId=${data.info.feeDetails.restaurantId}`
+          `/restaurant?name=${data.info.name}&restaurantId=${data.info.id}`
         );
       }}
       onKeyDown={() => {
         router.push(
-          `/restaurant?name=${data.info.name}&restaurantId=${data.info.feeDetails.restaurantId}`
+          `/restaurant?name=${data.info.name}&restaurantId=${data.info.id}`
         );
       }}
       className="w-72 h-full hover:scale-95 transition-transform"

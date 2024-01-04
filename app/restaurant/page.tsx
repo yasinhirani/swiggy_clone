@@ -46,12 +46,36 @@ function Restaurant() {
           locationState.geometry.location.lng.toString()
         )
         .then((res) => {
-          setRestaurantData(res.data.data.cards[0].card.card.info);
-          setOffers(
-            res.data.data.cards[1].card.card.gridElements.infoWithStyle.offers
-          );
+          if(window.innerWidth < 900){
+            setRestaurantData(res.data.data.cards[2].card.card.info);
+          } else {
+            setRestaurantData(res.data.data.cards[0].card.card.info);
+          }
+          if (window.innerWidth < 900) {
+            setOffers(
+              res.data.data.cards[3].card.card.gridElements.infoWithStyle.offers
+            );
+          } else {
+            setOffers(
+              res.data.data.cards[1].card.card.gridElements.infoWithStyle.offers
+            );
+          }
           let menu = [];
-          if (
+          if (window.innerWidth < 900) {
+            if (
+              Object.prototype.hasOwnProperty.call(
+                res.data.data.cards[5],
+                "groupedCard"
+              )
+            ) {
+              menu =
+                res.data.data.cards[5].groupedCard.cardGroupMap.REGULAR.cards;
+            } else {
+              menu =
+                res.data.data.cards[5].groupedCard.cardGroupMap.REGULAR.cards;
+            }
+          } else if (
+            window.innerWidth > 900 &&
             Object.prototype.hasOwnProperty.call(
               res.data.data.cards[2],
               "groupedCard"
