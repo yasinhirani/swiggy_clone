@@ -42,21 +42,21 @@ function DesktopHomePage() {
         .then((res) => {
           if (res.data.data.cards[0].card.card.id !== "swiggy_not_present") {
             const data = {
-              bannerOffers:
-                res.data.data.cards[0].card.card.gridElements.infoWithStyle.info,
+              bannerOffers: null,
               whatsOnYourMind:
-                res.data.data.cards[1].card.card.gridElements.infoWithStyle.info,
+                res.data.data.cards[0].card.card.gridElements.infoWithStyle
+                  .info,
               topRestaurants:
-                res.data.data.cards[2].card.card.gridElements.infoWithStyle
+                res.data.data.cards[1].card.card.gridElements.infoWithStyle
                   .restaurants,
               restaurants:
-                res.data.data.cards[5].card.card.gridElements.infoWithStyle
+                res.data.data.cards[4].card.card.gridElements.infoWithStyle
                   .restaurants
             };
             setSwiggyMappingData(data);
             setRestaurantList(data.restaurants);
             const updatedFilterList =
-              res.data.data.cards[4].card.card.facetList.filter(
+              res.data.data.cards[3].card.card.facetList.filter(
                 (list: any) =>
                   list.id !== "catalog_cuisines" && list.id !== "explore"
               );
@@ -131,90 +131,94 @@ function DesktopHomePage() {
         <>
           <div className="w-full max-w-[92rem] mx-auto px-6 py-7">
             {/* Start Best offers */}
-            <div>
-              <div className="flex justify-between items-center space-x-5">
-                <h3 className="font-extrabold text-2xl">Best offers for you</h3>
-                <div className="flex items-center space-x-5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (bestOffersScrollRef.current) {
-                        bestOffersScrollRef.current.scrollLeft -= 600;
-                      }
-                    }}
-                    className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
-                  >
-                    <ArrowLeftIcon className="w-5 h-5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (bestOffersScrollRef.current) {
-                        bestOffersScrollRef.current.scrollLeft += 600;
-                      }
-                    }}
-                    className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
-                  >
-                    <ArrowRightIcon className="w-5 h-5" />
-                  </button>
+            {swiggyMappingData.bannerOffers && (
+              <div>
+                <div className="flex justify-between items-center space-x-5">
+                  <h3 className="font-extrabold text-2xl">
+                    Best offers for you
+                  </h3>
+                  <div className="flex items-center space-x-5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (bestOffersScrollRef.current) {
+                          bestOffersScrollRef.current.scrollLeft -= 600;
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
+                    >
+                      <ArrowLeftIcon className="w-5 h-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (bestOffersScrollRef.current) {
+                          bestOffersScrollRef.current.scrollLeft += 600;
+                        }
+                      }}
+                      className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center"
+                    >
+                      <ArrowRightIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+                <div
+                  ref={bestOffersScrollRef}
+                  className="mt-4 flex items-center space-x-5 overflow-hidden overflow-x-auto scrollbar-none"
+                >
+                  {swiggyMappingData !== null &&
+                    swiggyMappingData.bannerOffers.map((data: any) => {
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (data.action.link.includes("menu")) {
+                              router.push(
+                                `/restaurant?name=&restaurantId=${data.entityId}`
+                              );
+                            } else if (
+                              data.action.link.includes("collection_id")
+                            ) {
+                              const url = new URL(data.action.link);
+                              const collectionId =
+                                url.searchParams.get("collection_id");
+                              if (collectionId) {
+                                router.push(
+                                  `/collections?collectionId=${collectionId}`
+                                );
+                              } else {
+                                const entityId = data.entityId.split("/");
+                                router.push(
+                                  `/collections?collectionId=${
+                                    entityId[entityId.length - 1]
+                                  }`
+                                );
+                              }
+                            }
+                          }}
+                          key={data.id}
+                        >
+                          <figure>
+                            <Image
+                              src={`${SWIGGY_CAROUSAL_IMG_URL}${data.imageId}`}
+                              alt=""
+                              width={425}
+                              height={252}
+                              className="w-[425px] min-w-[425px] h-[252px]"
+                            />
+                          </figure>
+                        </button>
+                      );
+                    })}
                 </div>
               </div>
-              <div
-                ref={bestOffersScrollRef}
-                className="mt-4 flex items-center space-x-5 overflow-hidden overflow-x-auto scrollbar-none"
-              >
-                {swiggyMappingData !== null &&
-                  swiggyMappingData.bannerOffers.map((data: any) => {
-                    return (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (data.action.link.includes("menu")) {
-                            router.push(
-                              `/restaurant?name=&restaurantId=${data.entityId}`
-                            );
-                          } else if (
-                            data.action.link.includes("collection_id")
-                          ) {
-                            const url = new URL(data.action.link);
-                            const collectionId =
-                              url.searchParams.get("collection_id");
-                            if (collectionId) {
-                              router.push(
-                                `/collections?collectionId=${collectionId}`
-                              );
-                            } else {
-                              const entityId = data.entityId.split("/");
-                              router.push(
-                                `/collections?collectionId=${
-                                  entityId[entityId.length - 1]
-                                }`
-                              );
-                            }
-                          }
-                        }}
-                        key={data.id}
-                      >
-                        <figure>
-                          <Image
-                            src={`${SWIGGY_CAROUSAL_IMG_URL}${data.imageId}`}
-                            alt=""
-                            width={425}
-                            height={252}
-                            className="w-[425px] min-w-[425px] h-[252px]"
-                          />
-                        </figure>
-                      </button>
-                    );
-                  })}
-              </div>
-            </div>
+            )}
             {/* End Best offers */}
             {/* Start Whats on your mind */}
             <div className="mt-8">
               <div className="flex justify-between items-center space-x-5">
                 <h3 className="font-extrabold text-2xl">
-                  {swiggyData?.data?.cards[1].card.card.header.title}
+                  {swiggyData?.data?.cards[0].card.card.header.title}
                 </h3>
                 <div className="flex items-center space-x-5">
                   <button
@@ -282,7 +286,7 @@ function DesktopHomePage() {
             <div className="mt-10">
               <div className="flex justify-between items-center space-x-5">
                 <h3 className="font-extrabold text-2xl">
-                  {swiggyData?.data?.cards[2].card.card.header.title}
+                  {swiggyData?.data?.cards[1].card.card.header.title}
                 </h3>
                 <div className="flex items-center space-x-5">
                   <button
@@ -326,7 +330,7 @@ function DesktopHomePage() {
             {/* Start Restaurants with online food delivery */}
             <div className="mt-10 space-y-6">
               <h3 className="font-extrabold text-2xl">
-                {swiggyData?.data?.cards[3].card.card.title}
+                {swiggyData?.data?.cards[2].card.card.title}
               </h3>
               {/* Start Filter list */}
               <div className="flex items-center space-x-3 overflow-hidden overflow-x-auto">

@@ -15,12 +15,12 @@ function SearchResultDishCard({ dishInfo, addToCart }: any) {
         role="button"
         onClick={() =>
           router.push(
-            `/restaurant?name=${dishInfo.restaurant.info.name}&restaurantId=${dishInfo.restaurant.info.feeDetails.restaurantId}`
+            `/restaurant?name=${dishInfo.restaurant.info.name}&restaurantId=${dishInfo.restaurant.info.id}`
           )
         }
         onKeyDown={() =>
           router.push(
-            `/restaurant?name=${dishInfo.restaurant.info.name}&restaurantId=${dishInfo.restaurant.info.feeDetails.restaurantId}`
+            `/restaurant?name=${dishInfo.restaurant.info.name}&restaurantId=${dishInfo.restaurant.info.id}`
           )
         }
         className="flex justify-between items-center space-x-5"

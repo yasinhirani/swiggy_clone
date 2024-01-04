@@ -1,4 +1,4 @@
-const CORS_BYPASS_URL = "https://corsproxy.io/?";
+const CORS_BYPASS_URL = "https://proxy.cors.sh/";
 const SWIGGY_CAROUSAL_IMG_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/";
 const SWIGGY_CAROUSAL_MOBILE_IMG_URL =
