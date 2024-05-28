@@ -8,7 +8,7 @@ function SkeletonHomepageLoading() {
         <div className="loader animate-spin absolute top-48" />
         <figure>
           <Image
-            src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/icecream_wwomsa"
+            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/icecream_wwomsa"
             alt="Ice Cream"
             width={35}
             height={35}

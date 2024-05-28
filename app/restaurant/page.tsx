@@ -49,7 +49,7 @@ function Restaurant() {
           if(window.innerWidth < 900){
             setRestaurantData(res.data.data.cards[2].card.card.info);
           } else {
-            setRestaurantData(res.data.data.cards[0].card.card.info);
+            setRestaurantData(res.data.data.cards[2].card.card.info);
           }
           if (window.innerWidth < 900) {
             setOffers(
@@ -57,7 +57,7 @@ function Restaurant() {
             );
           } else {
             setOffers(
-              res.data.data.cards[1].card.card.gridElements.infoWithStyle.offers
+              res.data.data.cards[3].card.card.gridElements.infoWithStyle.offers
             );
           }
           let menu = [];
@@ -72,7 +72,7 @@ function Restaurant() {
                 res.data.data.cards[5].groupedCard.cardGroupMap.REGULAR.cards;
             } else {
               menu =
-                res.data.data.cards[5].groupedCard.cardGroupMap.REGULAR.cards;
+                res.data.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards;
             }
           } else if (
             window.innerWidth > 900 &&
@@ -85,7 +85,7 @@ function Restaurant() {
               res.data.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards;
           } else {
             menu =
-              res.data.data.cards[3].groupedCard.cardGroupMap.REGULAR.cards;
+              res.data.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards;
           }
           if (
             Object.prototype.hasOwnProperty.call(menu[1].card.card, "carousel")

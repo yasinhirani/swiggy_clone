@@ -8,7 +8,7 @@ function SwiggyUnserviceable({ swiggyData }: any) {
       <div className="w-full max-w-[25rem] mx-auto px-6 py-7 flex flex-col items-center mt-20">
         <figure>
           <Image
-            src={swiggyData.data.cards[0].card.card.imageLink}
+            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_476,h_476/portal/m/location_unserviceable.png"
             alt={swiggyData.data.cards[0].card.card.title}
             width={300}
             height={300}
@@ -25,7 +25,7 @@ function SwiggyUnserviceable({ swiggyData }: any) {
         <h2 className="font-bold text-2xl mt-6 text-gray-800">
           {swiggyData.data.cards[1].card.card.title}
         </h2>
-        <div className="grid grid-cols-4 gap-10 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-10 mt-4">
           {swiggyData.data.cards[1].card.card.cities.map(
             (city: { text: string; link: string }) => {
               return (
