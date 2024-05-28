@@ -34,6 +34,7 @@ function MobileHomePage() {
         )
         .then((res) => {
           setSwiggyData(res.data);
+          if(res.data.data.cards[0].card.card.id === "swiggy_not_present") return;
           setRestaurantList(
             res.data.data.cards[2].card.card.gridElements.infoWithStyle
               .restaurants
